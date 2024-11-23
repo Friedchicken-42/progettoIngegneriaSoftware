@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">EcoDigify</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
+    <string name="title_ingredients">Ingredienti</string>
+    <string name="title_search">Ricerca</string>
+    <string name="title_favourites">Preferiti</string>
+    <string name="text_scan_button">Scansiona un Ingrediente</string>
 </resources>
