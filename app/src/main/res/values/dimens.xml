@@ -6,5 +6,8 @@
     <dimen name="list_margin_lateral">2dp</dimen>
     <dimen name="list_margin_top_bottom">15dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
+    <dimen name="ingredient_vertical_layout_margin">30dp</dimen>
+    <dimen name="date_quantity_button_picker_height">60dp</dimen>
+    <dimen name="ingredient_popup_button_dimension">130dp</dimen>
 
 </resources>
