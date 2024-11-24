@@ -1,0 +1,25 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="@dimen/list_margin_lateral"
+    android:layout_marginVertical="@dimen/list_margin_top_bottom"
+    android:layout_marginBottom="30dp"
+    android:gravity="clip_horizontal"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/ingredientTitleTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/defaultIngredientTitle"
+        android:textStyle="bold" />
+
+    <ProgressBar
+        android:id="@+id/ingredientExpirationProgressBar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="8dp"
+        android:layout_marginTop="8dp"
+        android:max="100"
+        android:progressTint="@color/purple_500" />
+</LinearLayout>

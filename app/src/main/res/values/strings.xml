@@ -4,4 +4,6 @@
     <string name="title_search">Ricerca</string>
     <string name="title_favourites">Preferiti</string>
     <string name="text_scan_button">Scansiona un Ingrediente</string>
+    <string name="defaultIngredientTitle">Titolo Ingrediente</string>
+    <string name="noIngredientsText">Scansiona un ingrediente per aggiungerlo</string>
 </resources>

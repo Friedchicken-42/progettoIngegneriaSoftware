@@ -7,7 +7,12 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.ecodigify.databinding.FragmentIngredientsBinding
+import com.example.ecodigify.IngredientFragmentListAdapter
+import com.example.ecodigify.dataclass.Ingredient
+import java.time.LocalDate
+import com.example.ecodigify.R
 
 class IngredientsFragment : Fragment() {
 
@@ -32,7 +37,34 @@ class IngredientsFragment : Fragment() {
         ingredientsViewModel.text.observe(viewLifecycleOwner) {
             textView.text = it
         }
+
         return root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        binding.ingredientsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
+
+        // TODO: add actual ingredients
+        val ingredientCount: Int = 1
+        binding.ingredientsRecyclerView.adapter = IngredientFragmentListAdapter(arrayOf(
+            Ingredient("id", "Ing1", emptyList(), LocalDate.now().minusDays(5), LocalDate.now().plusDays(1), "2"),
+            Ingredient("id", "Ing2", emptyList(), LocalDate.now().minusDays(4), LocalDate.now().plusDays(2), "2"),
+            Ingredient("id", "Ing3", emptyList(), LocalDate.now().minusDays(3), LocalDate.now().plusDays(5), "2"),
+            Ingredient("id", "Ing1", emptyList(), LocalDate.now().minusDays(5), LocalDate.now().plusDays(1), "2"),
+            Ingredient("id", "Ing2", emptyList(), LocalDate.now().minusDays(4), LocalDate.now().plusDays(2), "2"),
+            Ingredient("id", "Ing3", emptyList(), LocalDate.now().minusDays(3), LocalDate.now().plusDays(5), "2"),
+            Ingredient("id", "Ing1", emptyList(), LocalDate.now().minusDays(5), LocalDate.now().plusDays(1), "2"),
+            Ingredient("id", "Ing2", emptyList(), LocalDate.now().minusDays(4), LocalDate.now().plusDays(2), "2"),
+            Ingredient("id", "Ing3", emptyList(), LocalDate.now().minusDays(3), LocalDate.now().plusDays(5), "2"),
+            Ingredient("id", "Ing1", emptyList(), LocalDate.now().minusDays(5), LocalDate.now().plusDays(1), "2"),
+            Ingredient("id", "Ing2", emptyList(), LocalDate.now().minusDays(4), LocalDate.now().plusDays(2), "2"),
+            Ingredient("id", "Ing3", emptyList(), LocalDate.now().minusDays(3), LocalDate.now().plusDays(5), "2"),
+            Ingredient("id", "Ing1", emptyList(), LocalDate.now().minusDays(5), LocalDate.now().plusDays(1), "2"),
+            Ingredient("id", "Ing2", emptyList(), LocalDate.now().minusDays(4), LocalDate.now().plusDays(2), "2"),
+            Ingredient("id", "Ing3", emptyList(), LocalDate.now().minusDays(3), LocalDate.now().plusDays(5), "2")))
+        val ingredientsViewModel =
+            ViewModelProvider(this).get(IngredientsViewModel::class.java)
+        ingredientsViewModel.updateText( if(ingredientCount == 0) view.context.getString(R.string.noIngredientsText) else "")
     }
 
     override fun onDestroyView() {

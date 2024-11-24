@@ -21,6 +21,7 @@ class IngredientApi : Api() {
             possible_names = out.product.categories_tags.map {
                 it.removePrefix("en:").replace("-", " ")
             },
+            add_date = LocalDate.now(),
             expiration = LocalDate.parse(
                 out.product.expiration_date,
                 DateTimeFormatter.ofPattern("dd/MM/yyyy")
