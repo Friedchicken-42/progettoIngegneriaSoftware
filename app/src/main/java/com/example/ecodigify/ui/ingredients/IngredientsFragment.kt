@@ -15,6 +15,7 @@ import com.example.ecodigify.ui.popup.PopupIngredientsActivity
 import com.example.ecodigify.dataclass.Ingredient
 import java.time.LocalDate
 import com.example.ecodigify.R
+import kotlinx.serialization.json.Json
 
 class IngredientsFragment : Fragment() {
 
@@ -49,7 +50,7 @@ class IngredientsFragment : Fragment() {
         // TODO: add actual ingredients
         val ingredientCount: Int = 1
         binding.ingredientsRecyclerView.adapter = IngredientFragmentListAdapter(arrayOf(
-            Ingredient("id", "Ing1", emptyList(), LocalDate.now().minusDays(5), LocalDate.now().plusDays(1), "2"),
+            Ingredient("id", "Ing1", arrayOf("aaa", "bbb", "ccc").toList(), LocalDate.now().minusDays(5), LocalDate.now().plusDays(1), "2"),
             Ingredient("id", "Ing2", emptyList(), LocalDate.now().minusDays(4), LocalDate.now().plusDays(2), "2"),
             Ingredient("id", "Ing3", emptyList(), LocalDate.now().minusDays(3), LocalDate.now().plusDays(5), "2"),
             Ingredient("id", "Ing1", emptyList(), LocalDate.now().minusDays(5), LocalDate.now().plusDays(1), "2"),
@@ -77,7 +78,8 @@ class IngredientsFragment : Fragment() {
 
     private fun adapterOnClick(ingredient: Ingredient) {
         val intent = Intent(binding.root.context, PopupIngredientsActivity()::class.java)
-        intent.putExtra("INGREDIENT_ID", ingredient.id) // TODO: check if it works
+        intent.putExtra("INGREDIENT", ingredient)
+        //intent.putExtra("INGREDIENT", ingredient.id)
         this.startActivity(intent)
     }
 }
