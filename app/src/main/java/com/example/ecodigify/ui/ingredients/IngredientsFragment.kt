@@ -76,7 +76,6 @@ class IngredientsFragment : Fragment() {
     }
 
     private fun adapterOnClick(ingredient: Ingredient) {
-        //binding.textIngredients.text = "BBBBB"
         val intent = Intent(binding.root.context, PopupIngredientsActivity()::class.java)
         intent.putExtra("INGREDIENT_ID", ingredient.id) // TODO: check if it works
         this.startActivity(intent)
