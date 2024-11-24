@@ -16,6 +16,13 @@
         android:theme="@style/Theme.EcoDigify"
         tools:targetApi="31">
         <activity
+            android:name=".ui.popup.PopupIngredientsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".PopupIngredientActivity"
+            android:exported="false"
+            android:theme="@style/Theme.EcoDigify" />
+        <activity
             android:name=".MainActivity"
             android:exported="true"
             android:label="@string/app_name">

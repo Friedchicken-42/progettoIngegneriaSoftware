@@ -13,21 +13,27 @@ import java.time.LocalDate
 import java.time.Period
 import kotlin.math.min
 
-class IngredientFragmentListAdapter(private val dataSet: Array<Ingredient>) :
+class IngredientFragmentListAdapter(private val dataSet: Array<Ingredient>, private val onClick: (Ingredient) -> Unit) :
     RecyclerView.Adapter<IngredientFragmentListAdapter.ViewHolder>() {
 
     /**
      * Provide a reference to the type of views that you are using
      * (custom ViewHolder)
      */
-    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val textView: TextView
-        val progressBar: ProgressBar
+    class ViewHolder(view: View, val onClick: (Ingredient) -> Unit) : RecyclerView.ViewHolder(view) {
+        // Define click listener for the ViewHolder's View
+        val textView: TextView = view.findViewById(R.id.ingredientTitleTextView)
+        val progressBar: ProgressBar = view.findViewById(R.id.ingredientExpirationProgressBar)
+
+        private var currentIngredient: Ingredient? = null
 
         init {
-            // Define click listener for the ViewHolder's View
-            textView = view.findViewById(R.id.ingredientTitleTextView)
-            progressBar = view.findViewById(R.id.ingredientExpirationProgressBar)
+            itemView.setOnClickListener { currentIngredient?.let { ingredient -> onClick(ingredient) } }
+        }
+
+        fun bind(ingredient: Ingredient) {
+            currentIngredient = ingredient
+            textView.text = ingredient.name
         }
     }
 
@@ -37,16 +43,15 @@ class IngredientFragmentListAdapter(private val dataSet: Array<Ingredient>) :
         val view = LayoutInflater.from(viewGroup.context)
             .inflate(R.layout.ingredient_row_item, viewGroup, false)
 
-        return ViewHolder(view)
+        return ViewHolder(view, onClick)
     }
 
     // Replace the contents of a view (invoked by the layout manager)
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
+        viewHolder.bind(dataSet[position])
 
         // Get element from your dataset at this position and replace the
         // contents of the view with that element
-
-
 
         val daysSinceAdded: Float = Period.between(dataSet[position].add_date, LocalDate.now()).days.toFloat()
         val daysExpiration: Float =Period.between(dataSet[position].add_date, dataSet[position].expiration).days.toFloat()

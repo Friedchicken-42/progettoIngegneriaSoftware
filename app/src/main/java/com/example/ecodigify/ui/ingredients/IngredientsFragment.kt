@@ -1,5 +1,6 @@
 package com.example.ecodigify.ui.ingredients
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.ecodigify.databinding.FragmentIngredientsBinding
 import com.example.ecodigify.IngredientFragmentListAdapter
+import com.example.ecodigify.ui.popup.PopupIngredientsActivity
 import com.example.ecodigify.dataclass.Ingredient
 import java.time.LocalDate
 import com.example.ecodigify.R
@@ -61,7 +63,8 @@ class IngredientsFragment : Fragment() {
             Ingredient("id", "Ing3", emptyList(), LocalDate.now().minusDays(3), LocalDate.now().plusDays(5), "2"),
             Ingredient("id", "Ing1", emptyList(), LocalDate.now().minusDays(5), LocalDate.now().plusDays(1), "2"),
             Ingredient("id", "Ing2", emptyList(), LocalDate.now().minusDays(4), LocalDate.now().plusDays(2), "2"),
-            Ingredient("id", "Ing3", emptyList(), LocalDate.now().minusDays(3), LocalDate.now().plusDays(5), "2")))
+            Ingredient("id", "Ing3", emptyList(), LocalDate.now().minusDays(3), LocalDate.now().plusDays(5), "2")),
+            { ing -> adapterOnClick(ing) }) // lambda that opens the popup
         val ingredientsViewModel =
             ViewModelProvider(this).get(IngredientsViewModel::class.java)
         ingredientsViewModel.updateText( if(ingredientCount == 0) view.context.getString(R.string.noIngredientsText) else "")
@@ -70,5 +73,12 @@ class IngredientsFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun adapterOnClick(ingredient: Ingredient) {
+        //binding.textIngredients.text = "BBBBB"
+        val intent = Intent(binding.root.context, PopupIngredientsActivity()::class.java)
+        intent.putExtra("INGREDIENT_ID", ingredient.id) // TODO: check if it works
+        this.startActivity(intent)
     }
 }
