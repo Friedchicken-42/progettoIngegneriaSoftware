@@ -8,9 +8,9 @@ import java.time.LocalDate
 @Entity
 data class Ingredient(
     @PrimaryKey
-    val id: Int,
+    val id: Long,
     val name: String,
     @ColumnInfo(name = "expiration_date")
     val expirationDate: LocalDate,
-    val quantity: Int,
+    val quantity: String,
 )

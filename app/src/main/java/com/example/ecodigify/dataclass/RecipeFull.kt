@@ -5,12 +5,12 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity
-data class Recipe(
+data class RecipeFull(
     @PrimaryKey
     val id: Int,
     val name: String,
     val thumbnail: Uri,
-    val instructions: String? = null,
-    val ingredients: List<Pair<String, Int>>? = null,
-    val source: Uri? = null,
+    val instructions: String,
+    val ingredients: List<Pair<String, String>>,
+    val source: Uri,
 )
