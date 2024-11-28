@@ -9,11 +9,13 @@ import java.time.format.DateTimeFormatter
 
 class IngredientApi : Api() {
     private val url = "https://world.openfoodfacts.net/api/v2/product"
+
+    // Use only the first number found
     private val regex = "\\d+".toRegex()
 
     suspend fun search(code: String): Ingredient {
+        // HTTP request
         val out: IngredientApiOutput = client.get("$url/$code?product_type=food").body()
-        println(out)
 
         return Ingredient(
             id = out.code,
@@ -29,6 +31,7 @@ class IngredientApi : Api() {
         )
     }
 
+    // Private classes that match the JSON format returned
     @Serializable
     private data class IngredientApiOutput(
         val code: String,

@@ -12,6 +12,7 @@ import io.ktor.http.HttpHeaders
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 
+// Base class for Http JSON requests
 open class Api {
     protected val client = HttpClient(Android) {
         install(ContentNegotiation) {
