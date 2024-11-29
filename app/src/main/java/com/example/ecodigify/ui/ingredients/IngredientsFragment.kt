@@ -50,21 +50,21 @@ class IngredientsFragment : Fragment() {
         // TODO: add actual ingredients
         val ingredientCount: Int = 1
         binding.ingredientsRecyclerView.adapter = IngredientFragmentListAdapter(arrayOf(
-            Ingredient("id", "Ing1", arrayOf("aaa", "bbb", "ccc").toList(), LocalDate.now().minusDays(5), LocalDate.now().plusDays(1), "2"),
-            Ingredient("id", "Ing2", emptyList(), LocalDate.now().minusDays(4), LocalDate.now().plusDays(2), "2"),
-            Ingredient("id", "Ing3", emptyList(), LocalDate.now().minusDays(3), LocalDate.now().plusDays(5), "2"),
-            Ingredient("id", "Ing1", emptyList(), LocalDate.now().minusDays(5), LocalDate.now().plusDays(1), "2"),
-            Ingredient("id", "Ing2", emptyList(), LocalDate.now().minusDays(4), LocalDate.now().plusDays(2), "2"),
-            Ingredient("id", "Ing3", emptyList(), LocalDate.now().minusDays(3), LocalDate.now().plusDays(5), "2"),
-            Ingredient("id", "Ing1", emptyList(), LocalDate.now().minusDays(5), LocalDate.now().plusDays(1), "2"),
-            Ingredient("id", "Ing2", emptyList(), LocalDate.now().minusDays(4), LocalDate.now().plusDays(2), "2"),
-            Ingredient("id", "Ing3", emptyList(), LocalDate.now().minusDays(3), LocalDate.now().plusDays(5), "2"),
-            Ingredient("id", "Ing1", emptyList(), LocalDate.now().minusDays(5), LocalDate.now().plusDays(1), "2"),
-            Ingredient("id", "Ing2", emptyList(), LocalDate.now().minusDays(4), LocalDate.now().plusDays(2), "2"),
-            Ingredient("id", "Ing3", emptyList(), LocalDate.now().minusDays(3), LocalDate.now().plusDays(5), "2"),
-            Ingredient("id", "Ing1", emptyList(), LocalDate.now().minusDays(5), LocalDate.now().plusDays(1), "2"),
-            Ingredient("id", "Ing2", emptyList(), LocalDate.now().minusDays(4), LocalDate.now().plusDays(2), "2"),
-            Ingredient("id", "Ing3", emptyList(), LocalDate.now().minusDays(3), LocalDate.now().plusDays(5), "2")),
+            Ingredient(1, "Ing1", LocalDate.now().minusDays(5), LocalDate.now().plusDays(1), arrayOf("aaa", "bbb", "ccc").toList(), "2"),
+            Ingredient(2, "Ing2", LocalDate.now().minusDays(4), LocalDate.now().plusDays(2), emptyList(),  "2"),
+            Ingredient(3, "Ing3", LocalDate.now().minusDays(3), LocalDate.now().plusDays(5), emptyList(), "2"),
+            Ingredient(4, "Ing1", LocalDate.now().minusDays(5), LocalDate.now().plusDays(1), emptyList(), "2"),
+            Ingredient(5, "Ing2", LocalDate.now().minusDays(4), LocalDate.now().plusDays(2), emptyList(), "2"),
+            Ingredient(6, "Ing3", LocalDate.now().minusDays(3), LocalDate.now().plusDays(5), emptyList(), "2"),
+            Ingredient(7, "Ing1", LocalDate.now().minusDays(5), LocalDate.now().plusDays(1), emptyList(), "2"),
+            Ingredient(8, "Ing2", LocalDate.now().minusDays(4), LocalDate.now().plusDays(2), emptyList(), "2"),
+            Ingredient(9, "Ing3", LocalDate.now().minusDays(3), LocalDate.now().plusDays(5), emptyList(), "2"),
+            Ingredient(10, "Ing1", LocalDate.now().minusDays(5), LocalDate.now().plusDays(1), emptyList(), "2"),
+            Ingredient(11, "Ing2", LocalDate.now().minusDays(4), LocalDate.now().plusDays(2), emptyList(), "2"),
+            Ingredient(12, "Ing3", LocalDate.now().minusDays(3), LocalDate.now().plusDays(5), emptyList(), "2"),
+            Ingredient(13, "Ing1", LocalDate.now().minusDays(5), LocalDate.now().plusDays(1), emptyList(), "2"),
+            Ingredient(14, "Ing2", LocalDate.now().minusDays(4), LocalDate.now().plusDays(2), emptyList(), "2"),
+            Ingredient(15, "Ing3", LocalDate.now().minusDays(3), LocalDate.now().plusDays(5), emptyList(), "2")),
             { ing -> adapterOnClick(ing) }) // lambda that opens the popup
         val ingredientsViewModel =
             ViewModelProvider(this).get(IngredientsViewModel::class.java)
@@ -79,7 +79,6 @@ class IngredientsFragment : Fragment() {
     private fun adapterOnClick(ingredient: Ingredient) {
         val intent = Intent(binding.root.context, PopupIngredientsActivity()::class.java)
         intent.putExtra("INGREDIENT", ingredient)
-        //intent.putExtra("INGREDIENT", ingredient.id)
         this.startActivity(intent)
     }
 }

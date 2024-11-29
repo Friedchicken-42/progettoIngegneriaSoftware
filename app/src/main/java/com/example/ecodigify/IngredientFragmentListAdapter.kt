@@ -53,8 +53,8 @@ class IngredientFragmentListAdapter(private val dataSet: Array<Ingredient>, priv
         // Get element from your dataset at this position and replace the
         // contents of the view with that element
 
-        val daysSinceAdded: Float = Period.between(dataSet[position].add_date, LocalDate.now()).days.toFloat()
-        val daysExpiration: Float =Period.between(dataSet[position].add_date, dataSet[position].expiration).days.toFloat()
+        val daysSinceAdded: Float = Period.between(dataSet[position].addDate, LocalDate.now()).days.toFloat()
+        val daysExpiration: Float =Period.between(dataSet[position].addDate, dataSet[position].expirationDate).days.toFloat()
         val progress: Int = min((daysSinceAdded / daysExpiration * viewHolder.progressBar.max).toInt(), viewHolder.progressBar.max)
 
         val context = viewHolder.itemView.context

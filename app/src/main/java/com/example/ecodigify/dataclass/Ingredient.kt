@@ -37,12 +37,12 @@ data class Ingredient(
     val id: Long,
     val name: String,
     @Serializable(with = LocalDateSerializer::class)
-    @ColumnInfo(name = "expiration_date")
-    val add_date: LocalDate,
+    @ColumnInfo(name = "add_date")
+    val addDate: LocalDate,
     @Serializable(with = LocalDateSerializer::class)
     @ColumnInfo(name = "expiration_date")
     val expirationDate: LocalDate,
     @ColumnInfo(name = "possible_names")
-    val possible_names: List<String>,
-    val quantity: String,
+    val possibleNames: List<String>,
+    val quantity: String
 ) : Parcelable
