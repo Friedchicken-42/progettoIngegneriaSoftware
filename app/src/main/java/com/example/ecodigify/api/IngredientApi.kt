@@ -18,16 +18,16 @@ class IngredientApi : Api() {
         val out: IngredientApiOutput = client.get("$url/$code?product_type=food").body()
 
         return Ingredient(
-            id = out.code,
+            id = out.code.toLong(),
             name = "",
             possible_names = out.product.categories_tags.map {
                 it.removePrefix("en:").replace("-", " ")
             },
-            expiration = LocalDate.parse(
+            expirationDate = LocalDate.parse(
                 out.product.expiration_date,
                 DateTimeFormatter.ofPattern("dd/MM/yyyy")
             ),
-            quantity = regex.find(out.product.quantity)?.value.orEmpty()
+            quantity = regex.find(out.product.quantity)?.value.orEmpty(),
         )
     }
 

@@ -13,6 +13,5 @@ data class Ingredient(
     @ColumnInfo(name = "expiration_date")
     val expirationDate: LocalDate,
     val possible_names: List<String>,
-    val expiration: LocalDate,
     val quantity: String,
 )

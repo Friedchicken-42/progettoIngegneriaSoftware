@@ -19,6 +19,7 @@ import com.example.ecodigify.dataclass.RecipeFull
     Converters.LocalDateToString::class,
     Converters.UriToString::class,
     Converters.IngredientListToString::class,
+    Converters.PossibleNames::class,
 )
 abstract class AppDatabase : RoomDatabase() {
     abstract val ingredientsDao: IngredientsDao

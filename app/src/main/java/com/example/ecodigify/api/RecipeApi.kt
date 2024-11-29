@@ -1,5 +1,6 @@
 package com.example.ecodigify.api
 
+import androidx.core.net.toUri
 import com.example.ecodigify.dataclass.Recipe
 import com.example.ecodigify.dataclass.RecipeFull
 import io.ktor.client.call.body
@@ -42,10 +43,10 @@ class RecipeApi : Api() {
             RecipeFull(
                 id = recipe.idMeal,
                 name = recipe.strMeal,
-                thumb = recipe.strMealThumb,
+                thumbnail = recipe.strMealThumb.toUri(),
                 instructions = recipe.strInstructions,
                 ingredients = recipe.ingredients,
-                source = recipe.source
+                source = recipe.source.toUri()
             )
         }
     }
@@ -58,10 +59,10 @@ class RecipeApi : Api() {
         return RecipeFull(
             id = recipe.idMeal,
             name = recipe.strMeal,
-            thumb = recipe.strMealThumb,
+            thumbnail = recipe.strMealThumb.toUri(),
             instructions = recipe.strInstructions,
             ingredients = recipe.ingredients,
-            source = recipe.source
+            source = recipe.source.toUri()
         )
     }
 
