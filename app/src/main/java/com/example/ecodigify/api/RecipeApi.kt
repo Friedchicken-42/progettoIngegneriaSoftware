@@ -31,12 +31,12 @@ class RecipeApi : Api() {
             Recipe(
                 id = recipe.idMeal,
                 name = recipe.strMeal,
-                thumb = recipe.strMealThumb
+                thumbnail = recipe.strMealThumb.toUri()
             )
         }
     }
 
-    // Returns all the `RecipeFull` that maches `name`
+    // Returns all the `RecipeFull` that matches `name`
     suspend fun find(name: String): List<RecipeFull> {
         val out: ApiList<RecipeFullApiOutput> = client.get("$url/search.php?s=$name").body()
         return out.meals.map { recipe ->

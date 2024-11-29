@@ -20,7 +20,7 @@ class IngredientApi : Api() {
         return Ingredient(
             id = out.code.toLong(),
             name = "",
-            possible_names = out.product.categories_tags.map {
+            possibleNames = out.product.categories_tags.map {
                 it.removePrefix("en:").replace("-", " ")
             },
             expirationDate = LocalDate.parse(
