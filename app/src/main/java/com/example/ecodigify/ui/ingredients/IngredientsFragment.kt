@@ -10,12 +10,11 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.ecodigify.databinding.FragmentIngredientsBinding
-import com.example.ecodigify.IngredientFragmentListAdapter
+import com.example.ecodigify.ui.adapters.IngredientFragmentListAdapter
 import com.example.ecodigify.ui.popup.PopupIngredientsActivity
 import com.example.ecodigify.dataclass.Ingredient
 import java.time.LocalDate
 import com.example.ecodigify.R
-import kotlinx.serialization.json.Json
 
 class IngredientsFragment : Fragment() {
 

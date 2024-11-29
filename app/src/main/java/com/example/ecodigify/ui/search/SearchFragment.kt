@@ -5,22 +5,16 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.ImageButton
 import android.widget.SearchView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.example.ecodigify.IngredientFragmentListAdapter
 import com.example.ecodigify.R
-import com.example.ecodigify.RecipeFragmentListAdapter
+import com.example.ecodigify.ui.adapters.RecipeFragmentListAdapter
 import com.example.ecodigify.databinding.FragmentSearchBinding
-import com.example.ecodigify.dataclass.Ingredient
 import com.example.ecodigify.dataclass.Recipe
-import com.example.ecodigify.ui.ingredients.IngredientsViewModel
-import com.example.ecodigify.ui.popup.PopupIngredientsActivity
 import com.example.ecodigify.ui.popup.PopupRecipeActivity
-import java.time.LocalDate
 
 class SearchFragment : Fragment() {
 
