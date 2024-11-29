@@ -10,4 +10,8 @@ class SearchViewModel : ViewModel() {
         value = "This is search Fragment"
     }
     val text: LiveData<String> = _text
+
+    fun updateText(newText: String) {
+        _text.value = newText
+    }
 }
