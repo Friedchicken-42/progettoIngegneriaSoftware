@@ -68,4 +68,25 @@ class Converters {
             return list
         }
     }
+
+    class PossibleNames {
+        @TypeConverter
+        fun namesListToString(names: List<String>): String {
+            var string = StringBuilder("[")
+
+            for (i in names.indices) {
+                if (i != 0) string.append(" | ")
+                string.append(names[i])
+            }
+
+            string.append("]")
+
+            return string.toString()
+        }
+
+        @TypeConverter
+        fun stringToNamesList(names: String): List<String> {
+            return names.removePrefix("[").removeSuffix("]").split(" | ")
+        }
+    }
 }
