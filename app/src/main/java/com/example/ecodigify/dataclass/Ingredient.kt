@@ -3,6 +3,9 @@ package com.example.ecodigify.dataclass
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import java.time.LocalDate
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.descriptors.PrimitiveKind
@@ -28,13 +31,18 @@ object LocalDateSerializer : KSerializer<LocalDate> {
 }
 
 @Parcelize
+@Entity
 data class Ingredient(
-    val id: String,
+    @PrimaryKey
+    val id: Long,
     val name: String,
-    val possible_names: List<String>,
     @Serializable(with = LocalDateSerializer::class)
+    @ColumnInfo(name = "expiration_date")
     val add_date: LocalDate,
     @Serializable(with = LocalDateSerializer::class)
-    val expiration: LocalDate,
+    @ColumnInfo(name = "expiration_date")
+    val expirationDate: LocalDate,
+    @ColumnInfo(name = "possible_names")
+    val possible_names: List<String>,
     val quantity: String,
 ) : Parcelable

@@ -9,24 +9,27 @@ import java.time.format.DateTimeFormatter
 
 class IngredientApi : Api() {
     private val url = "https://world.openfoodfacts.net/api/v2/product"
+
+    // Use only the first number found
     private val regex = "\\d+".toRegex()
 
     suspend fun search(code: String): Ingredient {
+        // HTTP request
         val out: IngredientApiOutput = client.get("$url/$code?product_type=food").body()
         println(out)
 
         return Ingredient(
-            id = out.code,
+            id = out.code.toLong(),
             name = "",
-            possible_names = out.product.categories_tags.map {
+            possibleNames = out.product.categories_tags.map {
                 it.removePrefix("en:").replace("-", " ")
             },
             add_date = LocalDate.now(),
-            expiration = LocalDate.parse(
+            expirationDate = LocalDate.parse(
                 out.product.expiration_date,
                 DateTimeFormatter.ofPattern("dd/MM/yyyy")
             ),
-            quantity = regex.find(out.product.quantity)?.value.orEmpty()
+            quantity = regex.find(out.product.quantity)?.value.orEmpty(),
         )
     }
 

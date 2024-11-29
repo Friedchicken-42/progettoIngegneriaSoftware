@@ -1,5 +1,6 @@
 package com.example.ecodigify.api
 
+import androidx.core.net.toUri
 import com.example.ecodigify.dataclass.Recipe
 import com.example.ecodigify.dataclass.RecipeFull
 import io.ktor.client.call.body
@@ -23,31 +24,34 @@ import kotlinx.serialization.json.jsonPrimitive
 class RecipeApi : Api() {
     private val url = "https://www.themealdb.com/api/json/v1/1"
 
+    // Returns all the `Recipe` with a specific ingredient
     suspend fun search(ingredient: String): List<Recipe> {
         val out: ApiList<RecipeApiOutput> = client.get("$url/filter.php?i=$ingredient").body()
         return out.meals.map { recipe ->
             Recipe(
                 id = recipe.idMeal,
                 name = recipe.strMeal,
-                thumb = recipe.strMealThumb
+                thumbnail = recipe.strMealThumb.toUri()
             )
         }
     }
 
+    // Returns all the `RecipeFull` that matches `name`
     suspend fun find(name: String): List<RecipeFull> {
         val out: ApiList<RecipeFullApiOutput> = client.get("$url/search.php?s=$name").body()
         return out.meals.map { recipe ->
             RecipeFull(
                 id = recipe.idMeal,
                 name = recipe.strMeal,
-                thumb = recipe.strMealThumb,
+                thumbnail = recipe.strMealThumb.toUri(),
                 instructions = recipe.strInstructions,
                 ingredients = recipe.ingredients,
-                source = recipe.source
+                source = recipe.source.toUri()
             )
         }
     }
 
+    // Convert a `Recipe` into a `RecipeFull` by doing an id lookup
     suspend fun inflate(recipe: Recipe): RecipeFull {
         val out: ApiList<RecipeFullApiOutput> = client.get("$url/lookup.php?i=${recipe.id}").body()
         val recipe = out.meals[0]
@@ -55,13 +59,14 @@ class RecipeApi : Api() {
         return RecipeFull(
             id = recipe.idMeal,
             name = recipe.strMeal,
-            thumb = recipe.strMealThumb,
+            thumbnail = recipe.strMealThumb.toUri(),
             instructions = recipe.strInstructions,
             ingredients = recipe.ingredients,
-            source = recipe.source
+            source = recipe.source.toUri()
         )
     }
 
+    // Private classes that match the JSON format returned
     @Serializable
     private data class ApiList<E>(
         val meals: List<E>
@@ -84,6 +89,7 @@ class RecipeApi : Api() {
         val ingredients: List<Pair<String, String>>,
     )
 
+    // Custom deserializer for `RecipeFullApiOutput`
     object RecipeFullSerializer : KSerializer<RecipeFullApiOutput> {
         @OptIn(InternalSerializationApi::class, ExperimentalSerializationApi::class)
         override val descriptor: SerialDescriptor = buildClassSerialDescriptor("RecipeFull") {
@@ -101,6 +107,7 @@ class RecipeApi : Api() {
             encoder: Encoder,
             value: RecipeFullApiOutput
         ) {
+            // Only deserializer is needed
             TODO("Not necessary now")
         }
 
@@ -108,6 +115,7 @@ class RecipeApi : Api() {
             require(decoder is JsonDecoder)
             val jsonObj = decoder.decodeJsonElement() as JsonObject
 
+            // Simple conversion for `string` and `int` fields
             val idMeal = jsonObj["idMeal"]?.jsonPrimitive?.int
                 ?: throw SerializationException("Missing 'idMeal'")
             val strMeal = jsonObj["strMeal"]?.jsonPrimitive?.content
@@ -119,9 +127,13 @@ class RecipeApi : Api() {
             val source = jsonObj["strSource"]?.jsonPrimitive?.content
                 ?: throw SerializationException("Missing 'source'")
 
+            // Custom conversion for `List<Pair<String, String>>`
+            // in the JSON data is stored as `{ "strIngredientN": x, "strMeasureN": y, ... }`,
+            // so we match them based on `N`
             val pairs = jsonObj.entries
                 .filter { it.key.startsWith("strIngredient") }
                 .filter {
+                    // remove empty values
                     it.value.jsonPrimitive.content.isNotEmpty() && it.value.jsonPrimitive.content != "null"
                 }
                 .map { (k, v) ->
@@ -129,6 +141,8 @@ class RecipeApi : Api() {
                     val key = "strMeasure$index"
 
                     val a = v.jsonPrimitive.content
+
+                    // match based on `N` (`index`)
                     val b = jsonObj[key]?.jsonPrimitive?.content
                         ?: throw SerializationException("Missing '$key' for $k ($index)")
 
