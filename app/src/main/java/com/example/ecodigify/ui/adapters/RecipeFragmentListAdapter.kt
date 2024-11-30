@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.ecodigify.R
 import com.example.ecodigify.dataclass.Recipe
 
@@ -29,7 +30,12 @@ class RecipeFragmentListAdapter(private val dataSet: Array<Recipe>, private val 
 
         fun bind(recipe: Recipe) {
             currentRecipe = recipe
-            textView.text = recipe.name
+
+            Glide.with(imageView.context)
+                .load(recipe.thumbnail) // Assuming thumbnail is of type Uri
+                .placeholder(R.drawable.ic_noimage_black_24dp) // Optional placeholder
+                .error(R.drawable.ic_noimage_black_24dp) // Optional error image
+                .into(imageView)
         }
     }
 
@@ -51,6 +57,7 @@ class RecipeFragmentListAdapter(private val dataSet: Array<Recipe>, private val 
 
         // viewHolder.imageView // TODO: implement image retrival
         viewHolder.textView.text = dataSet[position].name
+        dataSet[position].thumbnail
     }
 
     // Return the size of your dataset (invoked by the layout manager)
