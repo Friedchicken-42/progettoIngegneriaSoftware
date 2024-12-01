@@ -23,7 +23,6 @@ class RecipeFullFragmentListAdapter(private val dataSet: Array<RecipeFull>, priv
      * Provide a reference to the type of views that you are using
      * (custom ViewHolder)
      */
-    private lateinit var recyclerView: RecyclerView
 
     class ViewHolder(view: View, val onClick: (RecipeFull) -> Unit) : RecyclerView.ViewHolder(view) {
         // Define click listener for the ViewHolder's View
@@ -58,7 +57,7 @@ class RecipeFullFragmentListAdapter(private val dataSet: Array<RecipeFull>, priv
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder {
         // Create a new view, which defines the UI of the list item
         val view = LayoutInflater.from(viewGroup.context)
-            .inflate(R.layout.recipe_row_item, viewGroup, false)
+            .inflate(R.layout.recipefull_row_item, viewGroup, false)
 
         return ViewHolder(view, onClick)
     }
@@ -77,7 +76,7 @@ class RecipeFullFragmentListAdapter(private val dataSet: Array<RecipeFull>, priv
             .error(R.drawable.ic_noimage_black_24dp)
             .into(viewHolder.imageView)
 
-        recyclerView.adapter = IngredientPairListFragmentListAdapter(
+        viewHolder.recyclerView.adapter = IngredientPairListFragmentListAdapter(
             dataSet[position].ingredients
         ) { }
     }
