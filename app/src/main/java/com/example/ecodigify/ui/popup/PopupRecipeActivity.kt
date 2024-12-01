@@ -57,7 +57,8 @@ class PopupRecipeActivity : AppCompatActivity() {
                 .into(recipeImageView)
             titleTextView.text = recipe.name
             servingsTextView.text = "99 piatti in fila per sei con il resto di 2" // TODO: fix with actual servings
-            ingredientInstructionTextView.text = getString(R.string.single_recipe_format_string, recipe.ingredients, recipe.instructions)
+            val formattedIngredients = recipe.ingredients.joinToString("\n") { (first, second) -> second }
+            ingredientInstructionTextView.text = getString(R.string.single_recipe_format_string, formattedIngredients, recipe.instructions)
 
 
         }
