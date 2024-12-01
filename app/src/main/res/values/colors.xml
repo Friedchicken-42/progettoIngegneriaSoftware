@@ -14,4 +14,8 @@
 
     <color name="cancel_button">#F44336</color>
     <color name="confirm_button">#8BC34A</color>
+
+    <color name="ingredient_missing">#F44336</color>
+    <color name="ingredient_present">#8BC34A</color>
+
 </resources>

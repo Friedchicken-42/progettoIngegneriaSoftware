@@ -3,10 +3,12 @@ package com.example.ecodigify.ui.popup
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.view.Gravity
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.collection.emptyLongSet
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.bumptech.glide.Glide
@@ -29,6 +31,7 @@ class PopupRecipeActivity : AppCompatActivity() {
         val titleTextView = findViewById<TextView>(R.id.singleRecipeTitleTextView)
         val servingsTextView = findViewById<TextView>(R.id.servingsTextView)
         val sourceButton = findViewById<TextView>(R.id.sourceButton)
+        val favoriteImageView = findViewById<ImageView>(R.id.favorite_icon)
         val ingredientInstructionTextView = findViewById<TextView>(R.id.editTextTextMultiLine)
 
         val recipe = intent.getParcelableExtra<RecipeFull>("RECIPE")
@@ -36,6 +39,14 @@ class PopupRecipeActivity : AppCompatActivity() {
         sourceButton.setOnClickListener {
             val intent = Intent(Intent.ACTION_VIEW, recipe?.source)
             startActivity(intent)
+        }
+
+        var fav: Boolean = true // TODO: get from manager if recipe is in favourites
+
+        favoriteImageView.setOnClickListener {
+            fav = !fav
+            favoriteImageView.setImageResource( if (fav) R.drawable.ic_favorite_red_24dp else R.drawable.ic_favorite_black_24dp);
+            // TODO: commit changes to manager
         }
 
         recipe?.let {
