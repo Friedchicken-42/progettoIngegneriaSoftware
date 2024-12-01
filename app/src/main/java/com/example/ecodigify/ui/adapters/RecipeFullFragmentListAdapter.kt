@@ -1,13 +1,20 @@
 package com.example.ecodigify.ui.adapters
 
+import android.content.Intent
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.ecodigify.R
+import com.example.ecodigify.dataclass.Ingredient
+import com.example.ecodigify.dataclass.Recipe
 import com.example.ecodigify.dataclass.RecipeFull
+import com.example.ecodigify.ui.popup.PopupIngredientsActivity
+import com.example.ecodigify.ui.popup.PopupRecipeActivity
 
 class RecipeFullFragmentListAdapter(private val dataSet: Array<RecipeFull>, private val onClick: (RecipeFull) -> Unit) :
     RecyclerView.Adapter<RecipeFullFragmentListAdapter.ViewHolder>() {
@@ -16,11 +23,13 @@ class RecipeFullFragmentListAdapter(private val dataSet: Array<RecipeFull>, priv
      * Provide a reference to the type of views that you are using
      * (custom ViewHolder)
      */
+    private lateinit var recyclerView: RecyclerView
+
     class ViewHolder(view: View, val onClick: (RecipeFull) -> Unit) : RecyclerView.ViewHolder(view) {
         // Define click listener for the ViewHolder's View
         val imageView: ImageView = view.findViewById(R.id.recipeFullImageView)
         val textView: TextView = view.findViewById(R.id.recipeFullTitleTextView)
-        val recyclerView: RecyclerView = view.findViewById(R.id.recipeFullIngredientsRecyclerView)
+        var recyclerView: RecyclerView = view.findViewById(R.id.recipeFullIngredientsRecyclerView)
 
         private var currentRecipeFull: RecipeFull? = null
 
@@ -30,7 +39,18 @@ class RecipeFullFragmentListAdapter(private val dataSet: Array<RecipeFull>, priv
 
         fun bind(recipeFull: RecipeFull) {
             currentRecipeFull = recipeFull
+
             textView.text = recipeFull.name
+
+            Glide.with(imageView.context)
+                .load(recipeFull.thumbnail)
+                .placeholder(R.drawable.ic_noimage_black_24dp)
+                .error(R.drawable.ic_noimage_black_24dp)
+                .into(imageView)
+
+            recyclerView.adapter = IngredientPairListFragmentListAdapter(
+                recipeFull.ingredients
+            ){}
         }
     }
 
@@ -50,9 +70,16 @@ class RecipeFullFragmentListAdapter(private val dataSet: Array<RecipeFull>, priv
         // Get element from your dataset at this position and replace the
         // contents of the view with that element
 
-        // viewHolder.imageView // TODO: implement image retrival
         viewHolder.textView.text = dataSet[position].name
-        // TODO: populate recycler view
+        Glide.with(viewHolder.imageView.context)
+            .load(dataSet[position].source)
+            .placeholder(R.drawable.ic_noimage_black_24dp)
+            .error(R.drawable.ic_noimage_black_24dp)
+            .into(viewHolder.imageView)
+
+        recyclerView.adapter = IngredientPairListFragmentListAdapter(
+            dataSet[position].ingredients
+        ) { }
     }
 
     // Return the size of your dataset (invoked by the layout manager)

@@ -11,7 +11,7 @@
         android:id="@+id/ingredientTitleTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/defaultIngredientTitle"
+        android:text="@string/default_ingredient_title_text"
         android:textStyle="bold" />
 
     <ProgressBar

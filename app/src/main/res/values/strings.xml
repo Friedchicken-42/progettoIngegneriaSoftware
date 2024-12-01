@@ -4,7 +4,7 @@
     <string name="title_search">Ricerca</string>
     <string name="title_favourites">Preferiti</string>
     <string name="text_scan_button">Scansiona un Ingrediente</string>
-    <string name="defaultIngredientTitle">Titolo Ingrediente</string>
+    <string name="default_ingredient_title_text">Titolo Ingrediente</string>
     <string name="noIngredientsText">Scansiona un ingrediente per aggiungerlo</string>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
@@ -24,5 +24,5 @@
     <string name="default_servings_text">Per X persone</string>
     <string name="default_recipes_steps_text">Ingredienti\n- ingrediente 1\n- ingrediente 2\n...\nRicetta\n1. passaggio 1\n2. passaggio 2\n...</string>
     <string name="single_recipe_format_string">%1$s\n\n%2$s</string>
-    <string name="recipe_source_button_text">Sorgente Ricetta</string>
+    <string name="recipe_source_button_text">Sorgente</string>
 </resources>
