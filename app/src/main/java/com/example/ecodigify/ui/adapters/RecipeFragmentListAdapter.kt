@@ -32,9 +32,9 @@ class RecipeFragmentListAdapter(private val dataSet: Array<Recipe>, private val 
             currentRecipe = recipe
 
             Glide.with(imageView.context)
-                .load(recipe.thumbnail) // Assuming thumbnail is of type Uri
-                .placeholder(R.drawable.ic_noimage_black_24dp) // Optional placeholder
-                .error(R.drawable.ic_noimage_black_24dp) // Optional error image
+                .load(recipe.thumbnail)
+                .placeholder(R.drawable.ic_noimage_black_24dp)
+                .error(R.drawable.ic_noimage_black_24dp)
                 .into(imageView)
         }
     }
@@ -55,7 +55,11 @@ class RecipeFragmentListAdapter(private val dataSet: Array<Recipe>, private val 
         // Get element from your dataset at this position and replace the
         // contents of the view with that element
 
-        // viewHolder.imageView // TODO: implement image retrival
+        Glide.with(viewHolder.imageView.context)
+            .load(dataSet[position].thumbnail)
+            .placeholder(R.drawable.ic_noimage_black_24dp)
+            .error(R.drawable.ic_noimage_black_24dp)
+            .into(viewHolder.imageView)
         viewHolder.textView.text = dataSet[position].name
         dataSet[position].thumbnail
     }

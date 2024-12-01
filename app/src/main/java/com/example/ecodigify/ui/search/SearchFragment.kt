@@ -20,6 +20,7 @@ import com.example.ecodigify.dataclass.Recipe
 import com.example.ecodigify.ui.popup.PopupRecipeActivity
 import android.view.Menu
 import com.example.ecodigify.dataclass.Ingredient
+import com.example.ecodigify.dataclass.RecipeFull
 import java.time.LocalDate
 
 
@@ -37,7 +38,7 @@ class SearchFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         val searchViewModel =
-            ViewModelProvider(this).get(SearchViewModel::class.java)
+            ViewModelProvider(this)[SearchViewModel::class.java]
 
         _binding = FragmentSearchBinding.inflate(inflater, container, false)
         val root: View = binding.root
@@ -125,10 +126,11 @@ class SearchFragment : Fragment() {
         val recipeCount: Int = recipes.size
 
         binding.recipeRecyclerView.adapter = RecipeFragmentListAdapter(
-            recipes ,{ rc -> adapterOnClick(rc) })
+            recipes
+        ) { rc -> adapterOnClick(rc) } // TODO: use manager to get full recipe
 
         val searchViewModel =
-            ViewModelProvider(this).get(SearchViewModel::class.java)
+            ViewModelProvider(this)[SearchViewModel::class.java]
         (if(recipeCount == 0) view?.context?.getString(R.string.noRecipesText) else "")?.let {
             searchViewModel.updateText(
                 it
@@ -142,9 +144,17 @@ class SearchFragment : Fragment() {
         _binding = null
     }
 
-    private fun adapterOnClick(recipe: Recipe) {
+    private fun adapterOnClick(recipe: Recipe) { // TODO: change to full recipe
         val intent = Intent(binding.root.context, PopupRecipeActivity()::class.java)
-        intent.putExtra("RECIPE", recipe)
+        //intent.putExtra("RECIPE", recipe)
+        intent.putExtra("RECIPE", RecipeFull(
+            1,
+            "hardcoded recipe",
+            Uri.parse("https://pbs.twimg.com/media/CGlKn0FVAAAoqBJ?format=png"),
+            "istruzioni",
+            emptyList<Pair<String, String>>(),
+            source = Uri.parse("https://wikipedia.com")
+        ))
         this.startActivity(intent)
     }
 }

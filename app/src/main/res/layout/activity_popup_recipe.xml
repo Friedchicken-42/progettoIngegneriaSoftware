@@ -7,4 +7,71 @@
     android:layout_height="match_parent"
     tools:context=".ui.popup.PopupRecipeActivity">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/singleRecipeImageView"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_margin="20dp"
+                android:contentDescription="@string/recipe_image_description"
+                app:srcCompat="@drawable/ic_noimage_black_24dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="fill_vertical"
+                android:orientation="vertical"
+                android:layout_marginEnd="20dp">
+
+                <TextView
+                    android:id="@+id/singleRecipeTitleTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:text="@string/recipe_default_title"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/servingsTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:text="@string/default_servings_text"/>
+
+                <Button
+                    android:id="@+id/sourceButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:text="@string/recipe_source_button_text" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <EditText
+            android:id="@+id/editTextTextMultiLine"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_margin="20dp"
+            android:layout_weight="1"
+            android:autofillHints=""
+            android:ems="10"
+            android:gravity="start|top"
+            android:inputType="none"
+            android:focusable="false"
+            android:clickable="false"
+            android:cursorVisible="false"
+            android:background="@null"
+            android:text="@string/default_recipes_steps_text" />
+
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
