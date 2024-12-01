@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
+import android.widget.PopupMenu
 import android.widget.SearchView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
@@ -16,8 +17,11 @@ import com.example.ecodigify.R
 import com.example.ecodigify.ui.adapters.RecipeFragmentListAdapter
 import com.example.ecodigify.databinding.FragmentSearchBinding
 import com.example.ecodigify.dataclass.Recipe
-import com.example.ecodigify.ui.ingredients.IngredientsViewModel
 import com.example.ecodigify.ui.popup.PopupRecipeActivity
+import android.view.Menu
+import com.example.ecodigify.dataclass.Ingredient
+import java.time.LocalDate
+
 
 class SearchFragment : Fragment() {
 
@@ -42,6 +46,7 @@ class SearchFragment : Fragment() {
         searchViewModel.text.observe(viewLifecycleOwner) {
             textView.text = it
         }
+
         return root
     }
 
@@ -50,12 +55,9 @@ class SearchFragment : Fragment() {
 
         val searchView: SearchView = binding.searchView
         val filterButton: ImageButton = binding.filterButton
+        var unWantedIngredients : MutableList<Int> = mutableListOf()
 
         binding.recipeRecyclerView.layoutManager = LinearLayoutManager(requireContext())
-
-        filterButton.setOnClickListener {
-            println("Filter button clicked") // TODO: implement
-        }
 
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
@@ -66,13 +68,45 @@ class SearchFragment : Fragment() {
             override fun onQueryTextChange(newText: String?): Boolean {
 
                 if (newText != null) {
-                    println("Search text changed: $newText")
+                    // TODO: actually update the shown recipes from manager using filtered ingredients
                     updateRecipes(emptyArray())
-                    // TODO: actually update the shown recipes from manager
                 }
                 return true
             }
         })
+
+
+        // TODO: get some ingredients from the manager?
+        val ingredients: Array<Ingredient> = arrayOf(
+            Ingredient(1, "ing XD", LocalDate.now(), LocalDate.now(), emptyList(), "4"),
+            Ingredient(2, "ing D:", LocalDate.now(), LocalDate.now(), emptyList(), "5"),
+            Ingredient(3, "ing :D", LocalDate.now(), LocalDate.now(), emptyList(), "6"),
+        )
+
+        val popFilterMenu = PopupMenu(activity, filterButton)
+
+        for (ing in ingredients) {
+            val itm = popFilterMenu.menu.add(Menu.NONE, ing.id.toInt(), Menu.NONE, ing.name) // Cast might be problematic!
+            itm.isCheckable = true
+            itm.isChecked = true
+        }
+
+        filterButton.setOnClickListener {
+            popFilterMenu.menuInflater.inflate(R.menu.search_filter_menu, popFilterMenu.menu)
+            popFilterMenu.setOnMenuItemClickListener { menuItem ->
+                if (menuItem.isChecked) {
+                    unWantedIngredients.add(menuItem.itemId)
+                } else {
+                    unWantedIngredients.remove(menuItem.itemId)
+                }
+                menuItem.isChecked = !menuItem.isChecked
+
+                // TODO: get new filtered recipes from the manager
+
+                true
+            }
+            popFilterMenu.show()
+        }
 
         // TODO: get some recipes from the manager?
         updateRecipes(arrayOf(
