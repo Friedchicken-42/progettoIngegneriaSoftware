@@ -70,11 +70,6 @@ class RecipeFullFragmentListAdapter(private val dataSet: Array<RecipeFull>, priv
         // contents of the view with that element
 
         viewHolder.textView.text = dataSet[position].name
-        Glide.with(viewHolder.imageView.context)
-            .load(dataSet[position].source)
-            .placeholder(R.drawable.ic_noimage_black_24dp)
-            .error(R.drawable.ic_noimage_black_24dp)
-            .into(viewHolder.imageView)
 
         viewHolder.recyclerView.adapter = IngredientPairListFragmentListAdapter(
             dataSet[position].ingredients
