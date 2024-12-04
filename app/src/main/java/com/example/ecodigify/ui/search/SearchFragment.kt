@@ -1,9 +1,9 @@
 package com.example.ecodigify.ui.search
 
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
@@ -13,14 +13,14 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.ecodigify.Manager
 import com.example.ecodigify.R
-import com.example.ecodigify.ui.adapters.RecipeFragmentListAdapter
 import com.example.ecodigify.databinding.FragmentSearchBinding
-import com.example.ecodigify.dataclass.Recipe
-import com.example.ecodigify.ui.popup.PopupRecipeActivity
-import android.view.Menu
 import com.example.ecodigify.dataclass.Ingredient
-import com.example.ecodigify.dataclass.RecipeFull
+import com.example.ecodigify.dataclass.Recipe
+import com.example.ecodigify.run
+import com.example.ecodigify.ui.adapters.RecipeFragmentListAdapter
+import com.example.ecodigify.ui.popup.PopupRecipeActivity
 import java.time.LocalDate
 
 
@@ -56,7 +56,7 @@ class SearchFragment : Fragment() {
 
         val searchView: SearchView = binding.searchView
         val filterButton: ImageButton = binding.filterButton
-        var unWantedIngredients : MutableList<Int> = mutableListOf()
+        var unWantedIngredients: MutableList<Int> = mutableListOf()
 
         binding.recipeRecyclerView.layoutManager = LinearLayoutManager(requireContext())
 
@@ -87,7 +87,12 @@ class SearchFragment : Fragment() {
         val popFilterMenu = PopupMenu(activity, filterButton)
 
         for (ing in ingredients) {
-            val itm = popFilterMenu.menu.add(Menu.NONE, ing.id.toInt(), Menu.NONE, ing.name) // Cast might be problematic!
+            val itm = popFilterMenu.menu.add(
+                Menu.NONE,
+                ing.id.toInt(),
+                Menu.NONE,
+                ing.name
+            ) // Cast might be problematic!
             itm.isCheckable = true
             itm.isChecked = true
         }
@@ -109,17 +114,11 @@ class SearchFragment : Fragment() {
             popFilterMenu.show()
         }
 
-        // TODO: get some recipes from the manager?
-        updateRecipes(arrayOf(
-            Recipe(1, "newText", Uri.parse("https://i.pinimg.com/736x/71/8c/3b/718c3b7a85ab9f7085807ececae7ca78.jpg")),
-            Recipe(1, "newText", Uri.parse("https://i.pinimg.com/736x/71/8c/3b/718c3b7a85ab9f7085807ececae7ca78.jpg")),
-            Recipe(1, "newText", Uri.parse("https://i.pinimg.com/736x/71/8c/3b/718c3b7a85ab9f7085807ececae7ca78.jpg")),
-            Recipe(1, "newText", Uri.parse("https://i.pinimg.com/736x/71/8c/3b/718c3b7a85ab9f7085807ececae7ca78.jpg")),
-            Recipe(1, "newText", Uri.parse("https://i.pinimg.com/736x/71/8c/3b/718c3b7a85ab9f7085807ececae7ca78.jpg")),
-            Recipe(1, "newText", Uri.parse("https://i.pinimg.com/736x/71/8c/3b/718c3b7a85ab9f7085807ececae7ca78.jpg")),
-            Recipe(1, "newText", Uri.parse("https://i.pinimg.com/736x/71/8c/3b/718c3b7a85ab9f7085807ececae7ca78.jpg"))
-        ))
-
+        run(
+            lifecycle = lifecycle,
+            function = { Manager.search("salt") },
+            done = { recipes -> updateRecipes(recipes.toTypedArray()) }
+        )
     }
 
     private fun updateRecipes(recipes: Array<Recipe>) {
@@ -127,11 +126,11 @@ class SearchFragment : Fragment() {
 
         binding.recipeRecyclerView.adapter = RecipeFragmentListAdapter(
             recipes
-        ) { rc -> adapterOnClick(rc) } // TODO: use manager to get full recipe
+        ) { rc -> adapterOnClick(rc) }
 
         val searchViewModel =
             ViewModelProvider(this)[SearchViewModel::class.java]
-        (if(recipeCount == 0) view?.context?.getString(R.string.noRecipesText) else "")?.let {
+        (if (recipeCount == 0) view?.context?.getString(R.string.noRecipesText) else "")?.let {
             searchViewModel.updateText(
                 it
             )
@@ -144,17 +143,16 @@ class SearchFragment : Fragment() {
         _binding = null
     }
 
-    private fun adapterOnClick(recipe: Recipe) { // TODO: change to full recipe
+    private fun adapterOnClick(recipe: Recipe) {
         val intent = Intent(binding.root.context, PopupRecipeActivity()::class.java)
-        //intent.putExtra("RECIPE", recipe)
-        intent.putExtra("RECIPE", RecipeFull(
-            1,
-            "hardcoded recipe",
-            Uri.parse("https://pbs.twimg.com/media/CGlKn0FVAAAoqBJ?format=png"),
-            "istruzioni",
-            emptyList<Pair<String, String>>(),
-            source = Uri.parse("https://wikipedia.com")
-        ))
-        this.startActivity(intent)
+
+        run(
+            lifecycle = lifecycle,
+            function = { Manager.inflate(recipe) },
+            done = { recipe ->
+                intent.putExtra("RECIPE", recipe)
+                this.startActivity(intent)
+            }
+        )
     }
 }
