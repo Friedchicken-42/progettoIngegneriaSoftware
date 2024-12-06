@@ -27,4 +27,6 @@
     <string name="recipe_source_button_text">Sorgente</string>
     <string name="favourite_button_under_text">Salva</string>
     <string name="favourite_button_description_text">Salva la ricetta nei preferiti</string>
+    <string name="no_barcode_detected_text">Nessun barcode trovato nell\'immagine</string>
+    <string name="barcode_error_message_text">Errore nella lettura del barcode</string>
 </resources>
