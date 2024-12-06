@@ -11,11 +11,12 @@ import android.widget.NumberPicker
 import android.widget.Spinner
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.os.BundleCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.example.ecodigify.Manager
 import com.example.ecodigify.R
 import com.example.ecodigify.dataclass.Ingredient
+import com.example.ecodigify.run
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
@@ -38,6 +39,7 @@ class PopupIngredientsActivity : AppCompatActivity() {
         val applyButton = findViewById<Button>(R.id.applyButton)
 
         var ingredient = intent.getParcelableExtra<Ingredient>("INGREDIENT")
+        val oldIngredient = ingredient
 
         ingredient?.let {
             val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, it.possibleNames)
@@ -67,7 +69,8 @@ class PopupIngredientsActivity : AppCompatActivity() {
         }
 
         dateButton.setOnClickListener {
-            val currentDate = LocalDate.parse(dateButton.text, DateTimeFormatter.ofPattern("dd/MM/yyyy"))
+            val currentDate =
+                LocalDate.parse(dateButton.text, DateTimeFormatter.ofPattern("dd/MM/yyyy"))
             showDatePickerDialog(currentDate) { selectedDate ->
                 dateButton.text = selectedDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
                 ingredient = ingredient?.copy(expirationDate = selectedDate)
@@ -75,7 +78,8 @@ class PopupIngredientsActivity : AppCompatActivity() {
         }
 
         quantityPicker.setOnValueChangedListener { picker, oldValue, newValue ->
-            ingredient = ingredient?.copy(quantity = newValue.toString()) // TODO: check if this is correct (what about the 1/3 cup...)
+            ingredient =
+                ingredient?.copy(quantity = newValue.toString()) // TODO: check if this is correct (what about the 1/3 cup...)
         }
 
         cancelButton.setOnClickListener {
@@ -83,10 +87,21 @@ class PopupIngredientsActivity : AppCompatActivity() {
         }
 
         applyButton.setOnClickListener {
-            // TODO: call manager to save thing
+            oldIngredient?.let { it ->
+                run(
+                    lifecycle = lifecycle,
+                    function = {
+                        Manager.ingredientRemove(it)
+                        Manager.ingredientAdd(ingredient!!)
+                    },
+                    done = {}
+                )
+            }
+
             finish()
         }
     }
+
     private fun showDatePickerDialog(currentDate: LocalDate, onDateSelected: (LocalDate) -> Unit) {
         val calendar = Calendar.getInstance().apply {
             set(Calendar.YEAR, currentDate.year)
@@ -97,7 +112,8 @@ class PopupIngredientsActivity : AppCompatActivity() {
         DatePickerDialog(
             this,
             { _, year, month, dayOfMonth ->
-                val selectedDate = LocalDate.of(year, month + 1, dayOfMonth) // select the following day
+                val selectedDate =
+                    LocalDate.of(year, month + 1, dayOfMonth) // select the following day
                 onDateSelected(selectedDate)
             },
             calendar.get(Calendar.YEAR),

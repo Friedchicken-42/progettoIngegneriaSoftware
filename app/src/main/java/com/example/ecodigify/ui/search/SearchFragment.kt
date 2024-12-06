@@ -16,12 +16,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.ecodigify.Manager
 import com.example.ecodigify.R
 import com.example.ecodigify.databinding.FragmentSearchBinding
-import com.example.ecodigify.dataclass.Ingredient
-import com.example.ecodigify.dataclass.Recipe
+import com.example.ecodigify.dataclass.RecipeFull
 import com.example.ecodigify.run
-import com.example.ecodigify.ui.adapters.RecipeFragmentListAdapter
+import com.example.ecodigify.ui.adapters.RecipeFullFragmentListAdapter
 import com.example.ecodigify.ui.popup.PopupRecipeActivity
-import java.time.LocalDate
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 
 
 class SearchFragment : Fragment() {
@@ -31,6 +31,8 @@ class SearchFragment : Fragment() {
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
+
+    private var searchJob: Job? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -67,35 +69,42 @@ class SearchFragment : Fragment() {
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
-
                 if (newText != null) {
-                    // TODO: actually update the shown recipes from manager using filtered ingredients
-                    updateRecipes(emptyArray())
+                    searchJob?.cancel()
+                    searchJob = run(
+                        lifecycle = lifecycle,
+                        function = {
+                            delay(250) // Debounce
+                            Manager.find(newText)
+                        },
+                        done = { recipes -> updateRecipes(recipes.toTypedArray()) },
+                        error = { updateRecipes(emptyArray()) }
+                    )
                 }
+
                 return true
             }
         })
 
-
-        // TODO: get some ingredients from the manager?
-        val ingredients: Array<Ingredient> = arrayOf(
-            Ingredient(1, "ing XD", LocalDate.now(), LocalDate.now(), emptyList(), "4"),
-            Ingredient(2, "ing D:", LocalDate.now(), LocalDate.now(), emptyList(), "5"),
-            Ingredient(3, "ing :D", LocalDate.now(), LocalDate.now(), emptyList(), "6"),
-        )
-
         val popFilterMenu = PopupMenu(activity, filterButton)
 
-        for (ing in ingredients) {
-            val itm = popFilterMenu.menu.add(
-                Menu.NONE,
-                ing.id.toInt(),
-                Menu.NONE,
-                ing.name
-            ) // Cast might be problematic!
-            itm.isCheckable = true
-            itm.isChecked = true
-        }
+        run(
+            lifecycle = lifecycle,
+            function = Manager::ingredientGetAll,
+            done = { ingredients ->
+
+                for (ing in ingredients) {
+                    val itm = popFilterMenu.menu.add(
+                        Menu.NONE,
+                        ing.id.toInt(),
+                        Menu.NONE,
+                        ing.name
+                    ) // Cast might be problematic!
+                    itm.isCheckable = true
+                    itm.isChecked = true
+                }
+            }
+        )
 
         filterButton.setOnClickListener {
             popFilterMenu.menuInflater.inflate(R.menu.search_filter_menu, popFilterMenu.menu)
@@ -116,15 +125,21 @@ class SearchFragment : Fragment() {
 
         run(
             lifecycle = lifecycle,
-            function = { Manager.search("salt") },
+            function = {
+                Manager.search("salt")
+                    .take(10)
+                    .map { recipe ->
+                        Manager.inflate(recipe)
+                    }
+            },
             done = { recipes -> updateRecipes(recipes.toTypedArray()) }
         )
     }
 
-    private fun updateRecipes(recipes: Array<Recipe>) {
+    private fun updateRecipes(recipes: Array<RecipeFull>) {
         val recipeCount: Int = recipes.size
 
-        binding.recipeRecyclerView.adapter = RecipeFragmentListAdapter(
+        binding.recipeRecyclerView.adapter = RecipeFullFragmentListAdapter(
             recipes
         ) { rc -> adapterOnClick(rc) }
 
@@ -143,16 +158,10 @@ class SearchFragment : Fragment() {
         _binding = null
     }
 
-    private fun adapterOnClick(recipe: Recipe) {
+    private fun adapterOnClick(recipe: RecipeFull) {
         val intent = Intent(binding.root.context, PopupRecipeActivity()::class.java)
+        intent.putExtra("RECIPE", recipe)
+        this.startActivity(intent)
 
-        run(
-            lifecycle = lifecycle,
-            function = { Manager.inflate(recipe) },
-            done = { recipe ->
-                intent.putExtra("RECIPE", recipe)
-                this.startActivity(intent)
-            }
-        )
     }
 }

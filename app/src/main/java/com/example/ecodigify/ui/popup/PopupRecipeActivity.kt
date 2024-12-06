@@ -47,22 +47,20 @@ class PopupRecipeActivity : AppCompatActivity() {
             function = { Manager.recipeGet(recipe!!) }, // TODO: recipe could be null(?)
             done = { r ->
                 fav = r != null
-                favoriteImageView.setImageResource(if (fav) R.drawable.ic_favorite_red_24dp else R.drawable.ic_favorite_black_24dp);
+                favoriteImageView.setImageResource(if (fav) R.drawable.ic_favorite_red_24dp else R.drawable.ic_favorite_black_24dp)
             },
         )
 
         favoriteImageView.setOnClickListener {
             fav = !fav
-            favoriteImageView.setImageResource(if (fav) R.drawable.ic_favorite_red_24dp else R.drawable.ic_favorite_black_24dp);
+            favoriteImageView.setImageResource(if (fav) R.drawable.ic_favorite_red_24dp else R.drawable.ic_favorite_black_24dp)
             run(
                 lifecycle = lifecycle,
                 function = {
                     if (!fav) {
                         Manager.recipeRemove(recipe!!)
-                        println("remove $recipe")
                     } else {
                         Manager.recipeAdd(recipe!!)
-                        println("add $recipe")
                     }
                 }, done = { }
             )
@@ -78,7 +76,7 @@ class PopupRecipeActivity : AppCompatActivity() {
             servingsTextView.text =
                 "99 piatti in fila per sei con il resto di 2" // TODO: fix with actual servings
             val formattedIngredients =
-                recipe.ingredients.joinToString("\n") { (first, second) -> second }
+                recipe.ingredients.joinToString("\n") { (_, second) -> second }
             ingredientInstructionTextView.text = getString(
                 R.string.single_recipe_format_string,
                 formattedIngredients,
@@ -90,12 +88,3 @@ class PopupRecipeActivity : AppCompatActivity() {
 
     }
 }
-
-/*
-* val id: Int,
-    val name: String,
-    val thumbnail: Uri,
-    val instructions: String,
-    val ingredients: List<Pair<String, String>>,
-    val source: Uri,
-* */

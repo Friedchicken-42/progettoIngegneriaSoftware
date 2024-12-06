@@ -9,6 +9,7 @@ import com.example.ecodigify.dataclass.Recipe
 import com.example.ecodigify.dataclass.RecipeFull
 import com.example.ecodigify.db.AppDatabase
 import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 // Mainly glue between `Api, Database` and `UI`
@@ -23,6 +24,10 @@ object Manager {
 
     suspend fun search(ing: String): List<Recipe> {
         return recipeApi.search(ing)
+    }
+
+    suspend fun find(ing: String): List<RecipeFull> {
+        return recipeApi.find(ing)
     }
 
     suspend fun inflate(recipe: Recipe): RecipeFull {
@@ -48,6 +53,14 @@ object Manager {
     suspend fun ingredientGetAll(): List<Ingredient> {
         return db!!.ingredientsDao.getAll()
     }
+
+    suspend fun ingredientRemove(ingredient: Ingredient) {
+        db!!.ingredientsDao.remove(ingredient)
+    }
+
+    suspend fun ingredientAdd(ingredient: Ingredient) {
+        db!!.ingredientsDao.add(ingredient)
+    }
 }
 
 // Callback-based async executor
@@ -60,8 +73,8 @@ fun <T> run(
     done: (data: T) -> Unit,
     error: ((Exception) -> Unit)? = null,
     cleanup: (() -> Unit)? = null,
-) {
-    lifecycle.coroutineScope.launch {
+): Job {
+    return lifecycle.coroutineScope.launch {
         try {
             done(function())
         } catch (_: CancellationException) {

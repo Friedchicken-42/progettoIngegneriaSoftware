@@ -75,13 +75,13 @@ class FavouritesFragment : Fragment() {
             lifecycle = lifecycle,
             function = Manager::recipeGetAll,
             done = { recipes ->
-                println(recipes)
-
                 binding.favouritesRecyclerView.adapter =
                     RecipeFullFragmentListAdapter(recipes.toTypedArray(),
                         { ing -> adapterOnClick(ing) })
+
                 val favouritesViewModel =
                     ViewModelProvider(this).get(FavouritesViewModel::class.java)
+
                 favouritesViewModel.updateText(
                     if (recipes.isEmpty()) {
                         requireView().context.getString(R.string.noRecipesText)
