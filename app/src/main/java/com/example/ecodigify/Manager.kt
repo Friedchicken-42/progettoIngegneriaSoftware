@@ -22,6 +22,10 @@ object Manager {
         this.db = db
     }
 
+    suspend fun barcode(code: String): Ingredient {
+        return ingredientApi.search(code)
+    }
+
     suspend fun search(ing: String): List<Recipe> {
         return recipeApi.search(ing)
     }
