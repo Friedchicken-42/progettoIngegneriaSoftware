@@ -34,6 +34,9 @@ class SearchFragment : Fragment() {
 
     private var searchJob: Job? = null
 
+    // TODO: switch search
+    private var search: String = "cake"
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -58,7 +61,7 @@ class SearchFragment : Fragment() {
 
         val searchView: SearchView = binding.searchView
         val filterButton: ImageButton = binding.filterButton
-        var unWantedIngredients: MutableList<Int> = mutableListOf()
+        var unwantedIngredients: MutableList<Int> = mutableListOf()
 
         binding.recipeRecyclerView.layoutManager = LinearLayoutManager(requireContext())
 
@@ -75,7 +78,8 @@ class SearchFragment : Fragment() {
                         lifecycle = lifecycle,
                         function = {
                             delay(250) // Debounce
-                            Manager.find(newText)
+                            search = newText
+                            Manager.find(search)
                         },
                         done = { recipes -> updateRecipes(recipes.toTypedArray()) },
                         error = { updateRecipes(emptyArray()) }
@@ -110,13 +114,28 @@ class SearchFragment : Fragment() {
             popFilterMenu.menuInflater.inflate(R.menu.search_filter_menu, popFilterMenu.menu)
             popFilterMenu.setOnMenuItemClickListener { menuItem ->
                 if (menuItem.isChecked) {
-                    unWantedIngredients.add(menuItem.itemId)
+                    unwantedIngredients.add(menuItem.itemId)
                 } else {
-                    unWantedIngredients.remove(menuItem.itemId)
+                    unwantedIngredients.remove(menuItem.itemId)
                 }
                 menuItem.isChecked = !menuItem.isChecked
 
-                // TODO: get new filtered recipes from the manager
+                run(
+                    lifecycle = lifecycle,
+                    function = {
+                        val ingredients = Manager.ingredientGetAll()
+                        val unwantedNames = ingredients
+                            .filter { i -> unwantedIngredients.contains(i.id.toInt()) }
+                            .map { i -> i.name }
+
+                        Manager.find(search)
+                            .filter { recipe ->
+                                recipe.ingredients.all { (name, _) -> !unwantedNames.contains(name) }
+                            }
+                    },
+                    done = { recipes -> updateRecipes(recipes.toTypedArray()) },
+                    error = { updateRecipes(emptyArray()) }
+                )
 
                 true
             }
@@ -126,11 +145,8 @@ class SearchFragment : Fragment() {
         run(
             lifecycle = lifecycle,
             function = {
-                Manager.search("salt")
-                    .take(10)
-                    .map { recipe ->
-                        Manager.inflate(recipe)
-                    }
+                Manager.find(search)
+                    .take(10) // TODO: Could union with `Manager.search`
             },
             done = { recipes -> updateRecipes(recipes.toTypedArray()) }
         )

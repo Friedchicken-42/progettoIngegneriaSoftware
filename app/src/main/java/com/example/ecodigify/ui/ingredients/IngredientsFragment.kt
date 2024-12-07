@@ -5,15 +5,14 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.os.Bundle
-import android.provider.MediaStore
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -24,11 +23,9 @@ import com.example.ecodigify.dataclass.Ingredient
 import com.example.ecodigify.run
 import com.example.ecodigify.ui.adapters.IngredientFragmentListAdapter
 import com.example.ecodigify.ui.popup.PopupIngredientsActivity
-import java.time.LocalDate
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.common.InputImage
-import androidx.core.content.ContextCompat
 
 class IngredientsFragment : Fragment() {
 
@@ -105,14 +102,35 @@ class IngredientsFragment : Fragment() {
             .addOnSuccessListener { barcodes ->
                 if (barcodes.isNotEmpty()) {
                     val barcodeValue = barcodes.first().rawValue
-                    Toast.makeText(requireContext(), "Barcode detected: $barcodeValue", Toast.LENGTH_SHORT).show()
-                    // TODO: call manger to get the ingredient from the API and open the ingredient modification page
+                    barcodeValue?.let { barcode ->
+                        run(
+                            lifecycle = lifecycle,
+                            function = { Manager.barcode(barcode) },
+                            done = { ingredient -> adapterOnClick(ingredient) },
+                            error = {
+                                Toast.makeText(
+                                    requireContext(),
+                                    "Error parsing barcode",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                        )
+                    }
+
                 } else {
-                    Toast.makeText(requireContext(), getString(R.string.no_barcode_detected_text), Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        requireContext(),
+                        getString(R.string.no_barcode_detected_text),
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
             .addOnFailureListener { e ->
-                Toast.makeText(requireContext(), "${getString(R.string.barcode_error_message_text)}: ${e.message}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    requireContext(),
+                    "${getString(R.string.barcode_error_message_text)}: ${e.message}",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
     }
 

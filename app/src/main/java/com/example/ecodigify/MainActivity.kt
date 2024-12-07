@@ -28,13 +28,17 @@ class MainActivity : AppCompatActivity() {
         run(
             lifecycle = lifecycle,
             function = {
+                for (ing in Manager.ingredientGetAll()) {
+                    Manager.ingredientRemove(ing)
+                }
+
                 Manager.ingredientAdd(
                     Ingredient(
                         1,
-                        "Ing1",
+                        "Flour",
                         LocalDate.now().minusDays(5),
                         LocalDate.now().plusDays(1),
-                        arrayOf("aaa", "bbb", "ccc").toList(),
+                        arrayOf("Flour", "Flour 00", "ccc").toList(),
                         "2"
                     )
                 )
