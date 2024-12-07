@@ -16,7 +16,6 @@ class IngredientApi : Api() {
     suspend fun search(code: String): Ingredient {
         // HTTP request
         val out: IngredientApiOutput = client.get("$url/$code?product_type=food").body()
-        println(out)
 
         return Ingredient(
             id = out.code.toLong(),

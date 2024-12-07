@@ -29,4 +29,7 @@
     <string name="favourite_button_description_text">Salva la ricetta nei preferiti</string>
     <string name="no_barcode_detected_text">Nessun barcode trovato nell\'immagine</string>
     <string name="barcode_error_message_text">Errore nella lettura del barcode</string>
+    <string name="barcode_process_error_message_text">Errore nel processare il barcode</string>
+    <string name="no_image_taken_text">Nessuna scansione avvenuta</string>
+    <string name="camera_permission_error">Autorizzazione della fotocamera negata</string>
 </resources>
