@@ -17,7 +17,8 @@
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_marginHorizontal="10dp">
 
         <TextView
             android:id="@+id/recipeFullTitleTextView"
@@ -30,10 +31,9 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recipeFullIngredientsRecyclerView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
+            android:layout_height="49dp"
+            android:nestedScrollingEnabled="false" />
 
     </LinearLayout>
-
 
 </LinearLayout>

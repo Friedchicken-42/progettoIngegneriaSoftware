@@ -10,13 +10,13 @@ import com.example.ecodigify.dataclass.Ingredient
 @Dao
 interface IngredientsDao {
     @Query("SELECT * FROM ingredient")
-    fun getAll(): List<Ingredient>
+    suspend fun getAll(): List<Ingredient>
 
     @Query("SELECT * FROM ingredient WHERE id = :id")
-    fun get(id: Int): Ingredient
+    suspend fun get(id: Int): Ingredient
 
     @Query("SELECT * FROM ingredient WHERE name = :name")
-    fun get(name: String): Ingredient
+    suspend fun get(name: String): Ingredient
 
     /**
      * Add one or more Ingredient class to the database
@@ -34,7 +34,7 @@ interface IngredientsDao {
      * <pre>
      */
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun add(vararg ingredient: Ingredient)
+    suspend fun add(vararg ingredient: Ingredient)
 
     /**
      * Remove one or more Ingredient class from the database
@@ -52,11 +52,11 @@ interface IngredientsDao {
      * <pre>
      */
     @Delete
-    fun remove(vararg ingredient: Ingredient)
+    suspend fun remove(vararg ingredient: Ingredient)
 
     @Query("DELETE FROM ingredient WHERE id = :id")
-    fun remove(id: Int)
+    suspend fun remove(id: Int)
 
     @Query("DELETE FROM ingredient")
-    fun clear()
+    suspend fun clear()
 }

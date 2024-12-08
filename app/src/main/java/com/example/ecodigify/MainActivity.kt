@@ -1,12 +1,17 @@
 package com.example.ecodigify
 
 import android.os.Bundle
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
+import androidx.room.Room
 import com.example.ecodigify.databinding.ActivityMainBinding
+import com.example.ecodigify.dataclass.Ingredient
+import com.example.ecodigify.db.AppDatabase
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import java.time.LocalDate
+import kotlin.arrayOf
 
 class MainActivity : AppCompatActivity() {
 
@@ -14,6 +19,34 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val db =
+            Room.databaseBuilder(applicationContext, AppDatabase::class.java, "Database").build()
+        Manager.init(db)
+
+        // Ingredient for testing
+        run(
+            lifecycle = lifecycle,
+            function = {
+                for (ing in Manager.ingredientGetAll()) {
+                    Manager.ingredientRemove(ing)
+                }
+
+                Manager.ingredientAdd(
+                    Ingredient(
+                        1,
+                        "Flour",
+                        LocalDate.now().minusDays(5),
+                        LocalDate.now().plusDays(1),
+                        arrayOf("Flour", "Flour 00", "ccc").toList(),
+                        "2"
+                    )
+                )
+            },
+            done = {},
+        )
+
+
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
