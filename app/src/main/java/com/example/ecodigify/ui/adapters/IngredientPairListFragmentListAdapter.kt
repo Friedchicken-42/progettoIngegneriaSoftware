@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ecodigify.R
@@ -19,9 +20,7 @@ class IngredientPairListFragmentListAdapter (private val dataSet: List<Pair<Stri
          */
         class ViewHolder(view: View, val onClick: (Pair<String, String>) -> Unit) : RecyclerView.ViewHolder(view) {
             // Define click listener for the ViewHolder's View
-            val imageView: ImageView = view.findViewById(R.id.recipeFullImageView)
-            val textView: TextView = view.findViewById(R.id.recipeFullTitleTextView)
-            val recyclerView: RecyclerView = view.findViewById(R.id.recipeFullIngredientsRecyclerView)
+            val textView: TextView = view.findViewById(R.id.ingredientPairTextView)
 
             private var currentIngredientString: Pair<String, String>? = null
 
@@ -31,7 +30,12 @@ class IngredientPairListFragmentListAdapter (private val dataSet: List<Pair<Stri
 
             fun bind(ingredientString: Pair<String, String>) {
                 currentIngredientString = ingredientString
-                textView.text = ingredientString.second
+                
+                textView.text = textView.context.getString(
+                    R.string.required_ingredient_format_string,
+                    ingredientString.first,
+                    ingredientString.second
+                )
             }
         }
 
@@ -50,8 +54,11 @@ class IngredientPairListFragmentListAdapter (private val dataSet: List<Pair<Stri
 
             // Get element from your dataset at this position and replace the
             // contents of the view with that element
-
-            viewHolder.textView.text = dataSet[position].second
+            viewHolder.textView.text = viewHolder.textView.context.getString(
+                R.string.required_ingredient_format_string,
+                dataSet[position].first,
+                dataSet[position].second
+            )
             if (true) // TODO: invoke manager to get actual presence of the ingredient
                 viewHolder.textView.setTextColor(ContextCompat.getColor(viewHolder.textView.context, R.color.ingredient_missing))
             else

@@ -1,8 +1,10 @@
 package com.example.ecodigify.ui.favourites
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
@@ -11,6 +13,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.ecodigify.Manager
 import com.example.ecodigify.R
 import com.example.ecodigify.databinding.FragmentFavouritesBinding
@@ -54,9 +57,29 @@ class FavouritesFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.favouritesRecyclerView.layoutManager = LinearLayoutManager(requireContext())
+
+        binding.favouritesRecyclerView.addOnItemTouchListener(object : RecyclerView.OnItemTouchListener {
+            override fun onInterceptTouchEvent(rv: RecyclerView, e: MotionEvent): Boolean {
+                val view = rv.findChildViewUnder(e.x, e.y)
+                val ingredientsRecyclerView = view?.findViewById<RecyclerView>(R.id.recipeFullIngredientsRecyclerView)
+
+                if (ingredientsRecyclerView != null) {
+                    when (e.action) {
+                        MotionEvent.ACTION_DOWN, MotionEvent.ACTION_MOVE -> {
+                            val canScrollVertically = ingredientsRecyclerView.canScrollVertically(-1) || ingredientsRecyclerView.canScrollVertically(1)
+                            rv.requestDisallowInterceptTouchEvent(canScrollVertically)
+                        }
+                        MotionEvent.ACTION_UP -> rv.requestDisallowInterceptTouchEvent(false)
+                    }
+                }
+                return false
+            }
+
+            override fun onTouchEvent(rv: RecyclerView, e: MotionEvent) {}
+            override fun onRequestDisallowInterceptTouchEvent(disallowIntercept: Boolean) {}
+        })
+
         display()
-
-
     }
 
     override fun onDestroyView() {

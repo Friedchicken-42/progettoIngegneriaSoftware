@@ -32,4 +32,5 @@
     <string name="barcode_process_error_message_text">Errore nel processare il barcode</string>
     <string name="no_image_taken_text">Nessuna scansione avvenuta</string>
     <string name="camera_permission_error">Autorizzazione della fotocamera negata</string>
+    <string name="required_ingredient_format_string">%1$s (%2$s)</string>
 </resources>

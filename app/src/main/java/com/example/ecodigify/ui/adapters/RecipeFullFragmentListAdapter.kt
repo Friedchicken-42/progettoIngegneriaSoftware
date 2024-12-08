@@ -1,20 +1,15 @@
 package com.example.ecodigify.ui.adapters
 
-import android.content.Intent
-import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.ecodigify.R
-import com.example.ecodigify.dataclass.Ingredient
-import com.example.ecodigify.dataclass.Recipe
 import com.example.ecodigify.dataclass.RecipeFull
-import com.example.ecodigify.ui.popup.PopupIngredientsActivity
-import com.example.ecodigify.ui.popup.PopupRecipeActivity
 
 class RecipeFullFragmentListAdapter(private val dataSet: Array<RecipeFull>, private val onClick: (RecipeFull) -> Unit) :
     RecyclerView.Adapter<RecipeFullFragmentListAdapter.ViewHolder>() {
@@ -47,9 +42,7 @@ class RecipeFullFragmentListAdapter(private val dataSet: Array<RecipeFull>, priv
                 .error(R.drawable.ic_noimage_black_24dp)
                 .into(imageView)
 
-            recyclerView.adapter = IngredientPairListFragmentListAdapter(
-                recipeFull.ingredients
-            ){}
+            recyclerView.layoutManager = LinearLayoutManager(itemView.context)
         }
     }
 

@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
@@ -13,6 +14,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.ecodigify.Manager
 import com.example.ecodigify.R
 import com.example.ecodigify.databinding.FragmentSearchBinding
@@ -64,6 +66,27 @@ class SearchFragment : Fragment() {
         var unwantedIngredients: MutableList<Int> = mutableListOf()
 
         binding.recipeRecyclerView.layoutManager = LinearLayoutManager(requireContext())
+
+        binding.recipeRecyclerView.addOnItemTouchListener(object : RecyclerView.OnItemTouchListener {
+            override fun onInterceptTouchEvent(rv: RecyclerView, e: MotionEvent): Boolean {
+                val view = rv.findChildViewUnder(e.x, e.y)
+                val ingredientsRecyclerView = view?.findViewById<RecyclerView>(R.id.recipeFullIngredientsRecyclerView)
+
+                if (ingredientsRecyclerView != null) {
+                    when (e.action) {
+                        MotionEvent.ACTION_DOWN, MotionEvent.ACTION_MOVE -> {
+                            val canScrollVertically = ingredientsRecyclerView.canScrollVertically(-1) || ingredientsRecyclerView.canScrollVertically(1)
+                            rv.requestDisallowInterceptTouchEvent(canScrollVertically)
+                        }
+                        MotionEvent.ACTION_UP -> rv.requestDisallowInterceptTouchEvent(false)
+                    }
+                }
+                return false
+            }
+
+            override fun onTouchEvent(rv: RecyclerView, e: MotionEvent) {}
+            override fun onRequestDisallowInterceptTouchEvent(disallowIntercept: Boolean) {}
+        })
 
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
