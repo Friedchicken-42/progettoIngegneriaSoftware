@@ -60,7 +60,11 @@ class IngredientsFragment : Fragment() {
                 bitmap?.let {
                     processBarcodeImage(it)
                 } ?: run {
-                    Toast.makeText(requireContext(), getString(R.string.no_image_taken_text), Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        requireContext(),
+                        getString(R.string.no_image_taken_text),
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
         var requestPermissionLauncher =
@@ -68,7 +72,11 @@ class IngredientsFragment : Fragment() {
                 if (isGranted) {
                     takePictureLauncher.launch(null) // Open the camera if permission is granted
                 } else {
-                    Toast.makeText(requireContext(), getString(R.string.camera_permission_error), Toast.LENGTH_SHORT)
+                    Toast.makeText(
+                        requireContext(),
+                        getString(R.string.camera_permission_error),
+                        Toast.LENGTH_SHORT
+                    )
                         .show()
                 }
             }
