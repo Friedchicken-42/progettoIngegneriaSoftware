@@ -1,12 +1,15 @@
 package com.example.ecodigify.ui.popup
 
+import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.icu.util.Calendar
 import android.os.Bundle
+import android.text.InputType
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Button
+import android.widget.EditText
 import android.widget.NumberPicker
 import android.widget.Spinner
 import androidx.activity.enableEdgeToEdge
@@ -41,10 +44,18 @@ class PopupIngredientsActivity : AppCompatActivity() {
         var ingredient = intent.getParcelableExtra<Ingredient>("INGREDIENT")
         val oldIngredient = ingredient
 
+        var possibleNamesWithAdd: MutableList<String> = arrayListOf()
+
         ingredient?.let {
-            val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, it.possibleNames)
+            possibleNamesWithAdd = it.possibleNames.toMutableList()
+            possibleNamesWithAdd.add(getString(R.string.add_new_name_text))
+            val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, possibleNamesWithAdd)
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             altNameSpinner.adapter = adapter
+            val currentNameIndex = possibleNamesWithAdd.indexOf(ingredient?.name)
+            if (currentNameIndex != -1) {
+                altNameSpinner.setSelection(currentNameIndex)
+            }
 
             val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
             dateButton.text = it.expirationDate.format(formatter)
@@ -59,12 +70,43 @@ class PopupIngredientsActivity : AppCompatActivity() {
 
         altNameSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View?, pos: Int, id: Long) {
-                val selectedName = parent.getItemAtPosition(pos).toString()
-                ingredient = ingredient?.copy(name = selectedName)
+                if (pos == possibleNamesWithAdd.size - 1) { // if new item has been selected
+                    showAddNewItemDialog()
+                } else {
+                    val selectedName = parent.getItemAtPosition(pos).toString()
+                    ingredient = ingredient?.copy(name = selectedName)
+                }
             }
 
             override fun onNothingSelected(parent: AdapterView<*>) {
                 // No change
+            }
+
+            private fun showAddNewItemDialog() {
+                val builder = AlertDialog.Builder(altNameSpinner.context)
+                builder.setTitle(getString(R.string.add_new_name_title_text))
+
+                val input = EditText(altNameSpinner.context)
+                input.inputType = InputType.TYPE_CLASS_TEXT
+                builder.setView(input)
+
+                builder.setPositiveButton(getString(R.string.apply_button_text)) { dialog, _ ->
+                    val newItemName = input.text.toString()
+                    if (newItemName.isNotBlank()) {
+                        ingredient?.possibleNames = ingredient?.possibleNames?.plus(listOf(newItemName))!!
+
+                        runOnUiThread {
+                            val adapter = altNameSpinner.adapter as ArrayAdapter<String>
+                            adapter.clear()
+                            adapter.addAll(ingredient?.possibleNames ?: emptyList())
+                            adapter.notifyDataSetChanged()
+                            altNameSpinner.setSelection(adapter.count - 1)
+                        }
+                    }
+                }
+                builder.setNegativeButton(getString(R.string.cancel_button_text)) { dialog, _ -> dialog.cancel() }
+
+                builder.show()
             }
         }
 

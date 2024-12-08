@@ -33,4 +33,6 @@
     <string name="no_image_taken_text">Nessuna scansione avvenuta</string>
     <string name="camera_permission_error">Autorizzazione della fotocamera negata</string>
     <string name="required_ingredient_format_string">%1$s (%2$s)</string>
+    <string name="add_new_name_text">Aggiungi nome alternativo...</string>
+    <string name="add_new_name_title_text">Nuovo nome alternativo</string>
 </resources>
