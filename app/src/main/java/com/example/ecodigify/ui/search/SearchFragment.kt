@@ -20,6 +20,7 @@ import com.example.ecodigify.R
 import com.example.ecodigify.databinding.FragmentSearchBinding
 import com.example.ecodigify.dataclass.RecipeFull
 import com.example.ecodigify.run
+import com.example.ecodigify.ui.adapters.DisplayIngredients
 import com.example.ecodigify.ui.adapters.RecipeFullFragmentListAdapter
 import com.example.ecodigify.ui.popup.PopupRecipeActivity
 import kotlinx.coroutines.Job
@@ -67,17 +68,23 @@ class SearchFragment : Fragment() {
 
         binding.recipeRecyclerView.layoutManager = LinearLayoutManager(requireContext())
 
-        binding.recipeRecyclerView.addOnItemTouchListener(object : RecyclerView.OnItemTouchListener {
+        binding.recipeRecyclerView.addOnItemTouchListener(object :
+            RecyclerView.OnItemTouchListener {
             override fun onInterceptTouchEvent(rv: RecyclerView, e: MotionEvent): Boolean {
                 val view = rv.findChildViewUnder(e.x, e.y)
-                val ingredientsRecyclerView = view?.findViewById<RecyclerView>(R.id.recipeFullIngredientsRecyclerView)
+                val ingredientsRecyclerView =
+                    view?.findViewById<RecyclerView>(R.id.recipeFullIngredientsRecyclerView)
 
                 if (ingredientsRecyclerView != null) {
                     when (e.action) {
                         MotionEvent.ACTION_DOWN, MotionEvent.ACTION_MOVE -> {
-                            val canScrollVertically = ingredientsRecyclerView.canScrollVertically(-1) || ingredientsRecyclerView.canScrollVertically(1)
+                            val canScrollVertically =
+                                ingredientsRecyclerView.canScrollVertically(-1) || ingredientsRecyclerView.canScrollVertically(
+                                    1
+                                )
                             rv.requestDisallowInterceptTouchEvent(canScrollVertically)
                         }
+
                         MotionEvent.ACTION_UP -> rv.requestDisallowInterceptTouchEvent(false)
                     }
                 }
@@ -179,7 +186,9 @@ class SearchFragment : Fragment() {
         val recipeCount: Int = recipes.size
 
         binding.recipeRecyclerView.adapter = RecipeFullFragmentListAdapter(
-            recipes
+            recipes,
+            emptyArray(),
+            DisplayIngredients.Hide,
         ) { rc -> adapterOnClick(rc) }
 
         val searchViewModel =

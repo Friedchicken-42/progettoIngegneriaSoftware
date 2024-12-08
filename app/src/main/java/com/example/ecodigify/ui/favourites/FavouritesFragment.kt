@@ -1,6 +1,5 @@
 package com.example.ecodigify.ui.favourites
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -19,6 +18,7 @@ import com.example.ecodigify.R
 import com.example.ecodigify.databinding.FragmentFavouritesBinding
 import com.example.ecodigify.dataclass.RecipeFull
 import com.example.ecodigify.run
+import com.example.ecodigify.ui.adapters.DisplayIngredients
 import com.example.ecodigify.ui.adapters.RecipeFullFragmentListAdapter
 import com.example.ecodigify.ui.popup.PopupRecipeActivity
 
@@ -58,17 +58,23 @@ class FavouritesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.favouritesRecyclerView.layoutManager = LinearLayoutManager(requireContext())
 
-        binding.favouritesRecyclerView.addOnItemTouchListener(object : RecyclerView.OnItemTouchListener {
+        binding.favouritesRecyclerView.addOnItemTouchListener(object :
+            RecyclerView.OnItemTouchListener {
             override fun onInterceptTouchEvent(rv: RecyclerView, e: MotionEvent): Boolean {
                 val view = rv.findChildViewUnder(e.x, e.y)
-                val ingredientsRecyclerView = view?.findViewById<RecyclerView>(R.id.recipeFullIngredientsRecyclerView)
+                val ingredientsRecyclerView =
+                    view?.findViewById<RecyclerView>(R.id.recipeFullIngredientsRecyclerView)
 
                 if (ingredientsRecyclerView != null) {
                     when (e.action) {
                         MotionEvent.ACTION_DOWN, MotionEvent.ACTION_MOVE -> {
-                            val canScrollVertically = ingredientsRecyclerView.canScrollVertically(-1) || ingredientsRecyclerView.canScrollVertically(1)
+                            val canScrollVertically =
+                                ingredientsRecyclerView.canScrollVertically(-1) || ingredientsRecyclerView.canScrollVertically(
+                                    1
+                                )
                             rv.requestDisallowInterceptTouchEvent(canScrollVertically)
                         }
+
                         MotionEvent.ACTION_UP -> rv.requestDisallowInterceptTouchEvent(false)
                     }
                 }
@@ -96,11 +102,15 @@ class FavouritesFragment : Fragment() {
     private fun display() {
         run(
             lifecycle = lifecycle,
-            function = Manager::recipeGetAll,
-            done = { recipes ->
+            function = { Pair(Manager.recipeGetAll(), Manager.ingredientGetAll()) },
+            done = { (recipes, ingredients) ->
                 binding.favouritesRecyclerView.adapter =
-                    RecipeFullFragmentListAdapter(recipes.toTypedArray(),
-                        { ing -> adapterOnClick(ing) })
+                    RecipeFullFragmentListAdapter(
+                        recipes.toTypedArray(),
+                        ingredients.toTypedArray(),
+                        DisplayIngredients.Display,
+                        { ing -> adapterOnClick(ing) }
+                    )
 
                 val favouritesViewModel =
                     ViewModelProvider(this).get(FavouritesViewModel::class.java)
