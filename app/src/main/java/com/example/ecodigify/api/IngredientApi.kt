@@ -17,13 +17,19 @@ class IngredientApi : Api() {
         // HTTP request
         val out: IngredientApiOutput = client.get("$url/$code?product_type=food").body()
 
-        val expirationDate = if (!out.product.expiration_date.isNullOrEmpty()) {
+        val expirationDate = if (out.product.expiration_date.isNullOrEmpty()) {
+            LocalDate.now().plusDays(7)
+        } else {
+            val pattern = if (out.product.expiration_date.contains("-")) {
+                DateTimeFormatter.ofPattern("yyyy-MM-dd")
+            } else {
+                DateTimeFormatter.ofPattern("dd/MM/yyyy")
+            }
+
             LocalDate.parse(
                 out.product.expiration_date,
-                DateTimeFormatter.ofPattern("dd/MM/yyyy")
+                pattern
             )
-        } else {
-            LocalDate.now().plusDays(7)
         }
 
         val quantity = if (!out.product.quantity.isNullOrEmpty()) {
