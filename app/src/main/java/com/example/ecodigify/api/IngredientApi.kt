@@ -42,8 +42,9 @@ class IngredientApi : Api() {
             id = out.code.toLong(),
             name = "",
             possibleNames = out.product.categories_tags.map {
-                it.removePrefix("en:").replace("-", " ")
-            },
+                if (it.contains(":")) it.drop(3)
+                else it
+            }.map { it.replace("-", " ") },
             addDate = LocalDate.now(),
             expirationDate = expirationDate,
             quantity = quantity,
