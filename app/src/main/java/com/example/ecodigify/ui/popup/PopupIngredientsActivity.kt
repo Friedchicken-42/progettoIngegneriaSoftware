@@ -12,6 +12,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.NumberPicker
 import android.widget.Spinner
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -60,11 +61,14 @@ class PopupIngredientsActivity : AppCompatActivity() {
             val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
             dateButton.text = it.expirationDate.format(formatter)
 
-            val quantityRange = 0..100
+            val quantityRange = 1..12
             quantityPicker.minValue = quantityRange.first
             quantityPicker.maxValue = quantityRange.last
             quantityPicker.wrapSelectorWheel = false
-            val currentQuantity = it.quantity.toIntOrNull() ?: 0
+            val currentQuantity = it.quantity.toIntOrNull()?.let { quantity ->
+                if (quantity > quantityRange.last) quantityRange.first else quantity
+            } ?: quantityRange.first
+
             quantityPicker.value = currentQuantity
         }
 
