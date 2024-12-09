@@ -127,13 +127,13 @@ class SearchFragment : Fragment() {
             function = Manager::ingredientGetAll,
             done = { ingredients ->
 
-                for (ing in ingredients) {
+                for (i in ingredients.indices) {
                     val itm = popFilterMenu.menu.add(
                         Menu.NONE,
-                        ing.id.toInt(),
+                        i,
                         Menu.NONE,
-                        ing.name
-                    ) // Cast might be problematic!
+                        ingredients[i].name
+                    )
                     itm.isCheckable = true
                     itm.isChecked = true
                 }
@@ -155,7 +155,7 @@ class SearchFragment : Fragment() {
                     function = {
                         val ingredients = Manager.ingredientGetAll()
                         val unwantedNames = ingredients
-                            .filter { i -> unwantedIngredients.contains(i.id.toInt()) }
+                            .filterIndexed { i,_ -> unwantedIngredients.contains(i) }
                             .map { i -> i.name }
 
                         Manager.find(search)
