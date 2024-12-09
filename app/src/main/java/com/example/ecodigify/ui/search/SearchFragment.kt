@@ -155,7 +155,7 @@ class SearchFragment : Fragment() {
                     function = {
                         val ingredients = Manager.ingredientGetAll()
                         val unwantedNames = ingredients
-                            .filterIndexed { i,_ -> unwantedIngredients.contains(i) }
+                            .filterIndexed { i, _ -> unwantedIngredients.contains(i) }
                             .map { i -> i.name }
 
                         Manager.find(search)

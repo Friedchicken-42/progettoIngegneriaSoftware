@@ -17,7 +17,7 @@ class IngredientApi : Api() {
         // HTTP request
         val out: IngredientApiOutput = client.get("$url/$code?product_type=food").body()
 
-        val expirationDate = if (out.product.expiration_date != null && out.product.expiration_date.isEmpty()) {
+        val expirationDate = if (!out.product.expiration_date.isNullOrEmpty()) {
             LocalDate.parse(
                 out.product.expiration_date,
                 DateTimeFormatter.ofPattern("dd/MM/yyyy")
@@ -26,7 +26,7 @@ class IngredientApi : Api() {
             LocalDate.now().plusDays(7)
         }
 
-        val quantity = if (out.product.quantity != null && out.product.quantity.isEmpty()) {
+        val quantity = if (!out.product.quantity.isNullOrEmpty()) {
             regex.find(out.product.quantity)?.value.orEmpty()
         } else {
             "1"
