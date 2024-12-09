@@ -43,6 +43,6 @@ data class Ingredient(
     @ColumnInfo(name = "expiration_date")
     val expirationDate: LocalDate,
     @ColumnInfo(name = "possible_names")
-    val possibleNames: List<String>,
+    var possibleNames: List<String>,
     val quantity: String
 ) : Parcelable
