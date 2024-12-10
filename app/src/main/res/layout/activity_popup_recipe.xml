@@ -54,17 +54,20 @@
 
                     <Button
                         android:id="@+id/sourceButton"
+                        style="?android:attr/buttonBarButtonStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/recipe_source_button_text" />
 
                     <!-- Spacer -->
                     <View
+                        style="?android:attr/buttonBarButtonStyle"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1" />
 
                     <RelativeLayout
+                        style="?android:attr/buttonBarButtonStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="0dp">
@@ -108,7 +111,8 @@
             android:focusable="false"
             android:gravity="start|top"
             android:inputType="none"
-            android:text="@string/default_recipes_steps_text" />
+            android:text="@string/default_recipes_steps_text"
+            tools:ignore="LabelFor" />
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

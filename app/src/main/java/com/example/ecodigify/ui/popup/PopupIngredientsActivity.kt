@@ -41,6 +41,7 @@ class PopupIngredientsActivity : AppCompatActivity() {
         val cancelButton = findViewById<Button>(R.id.cancelButton)
         val applyButton = findViewById<Button>(R.id.applyButton)
 
+        @Suppress("DEPRECATION")
         var ingredient = intent.getParcelableExtra<Ingredient>("INGREDIENT")
         val oldIngredient = ingredient
 

@@ -33,6 +33,7 @@ class PopupRecipeActivity : AppCompatActivity() {
         val favoriteImageView = findViewById<ImageView>(R.id.favorite_icon)
         val ingredientInstructionTextView = findViewById<TextView>(R.id.editTextTextMultiLine)
 
+        @Suppress("DEPRECATION")
         val recipe = intent.getParcelableExtra<RecipeFull>("RECIPE")
 
         sourceButton.setOnClickListener {
@@ -73,6 +74,7 @@ class PopupRecipeActivity : AppCompatActivity() {
                 .error(R.drawable.ic_noimage_black_24dp)
                 .into(recipeImageView)
             titleTextView.text = recipe.name
+            @Suppress("SetTextI18n")
             servingsTextView.text =
                 "99 piatti in fila per sei con il resto di 2" // TODO: fix with actual servings
             val formattedIngredients =
