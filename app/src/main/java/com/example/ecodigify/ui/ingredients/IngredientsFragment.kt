@@ -162,12 +162,12 @@ class IngredientsFragment : Fragment() {
         run(
             lifecycle = lifecycle,
             callback = Manager::ingredientGetAll,
-            done = { ingredients ->
-                var ingredients = ingredients.toTypedArray()
+            done = { ingredientsList ->
+                val ingredients = ingredientsList.toTypedArray()
                 val ingredientCount = ingredients.size
 
-                binding.ingredientsRecyclerView.adapter = IngredientFragmentListAdapter(ingredients,
-                    { ing -> adapterOnClick(ing) }) // lambda that opens the popup
+                binding.ingredientsRecyclerView.adapter = IngredientFragmentListAdapter(ingredients
+                ) { ing -> adapterOnClick(ing) } // lambda that opens the popup
 
                 val ingredientsViewModel =
                     ViewModelProvider(this)[IngredientsViewModel::class.java]
