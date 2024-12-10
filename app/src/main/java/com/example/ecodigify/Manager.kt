@@ -18,10 +18,11 @@ import androidx.room.Room
 object Manager {
     private val recipeApi = RecipeApi()
     private val ingredientApi = IngredientApi()
-    private var db: AppDatabase? = null
+    private lateinit var db: AppDatabase
 
     fun init(applicationContext: Context) {
-        this.db = Room.databaseBuilder(applicationContext, AppDatabase::class.java, "Database").build()
+        this.db =
+            Room.databaseBuilder(applicationContext, AppDatabase::class.java, "Database").build()
     }
 
     suspend fun barcode(code: String): Ingredient {
@@ -41,31 +42,31 @@ object Manager {
     }
 
     suspend fun recipeGetAll(): List<RecipeFull> {
-        return db!!.recipesDao.getAll()
+        return db.recipesDao.getAll()
     }
 
     suspend fun recipeGet(recipe: RecipeFull): RecipeFull? {
-        return db!!.recipesDao.get(recipe.id)
+        return db.recipesDao.get(recipe.id)
     }
 
     suspend fun recipeRemove(recipe: RecipeFull) {
-        db!!.recipesDao.remove(recipe)
+        db.recipesDao.remove(recipe)
     }
 
     suspend fun recipeAdd(recipe: RecipeFull) {
-        db!!.recipesDao.add(recipe)
+        db.recipesDao.add(recipe)
     }
 
     suspend fun ingredientGetAll(): List<Ingredient> {
-        return db!!.ingredientsDao.getAll()
+        return db.ingredientsDao.getAll()
     }
 
     suspend fun ingredientRemove(ingredient: Ingredient) {
-        db!!.ingredientsDao.remove(ingredient)
+        db.ingredientsDao.remove(ingredient)
     }
 
     suspend fun ingredientAdd(ingredient: Ingredient) {
-        db!!.ingredientsDao.add(ingredient)
+        db.ingredientsDao.add(ingredient)
     }
 }
 
