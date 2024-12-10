@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.popup.PopupIngredientsActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:layout_marginTop="100dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="start"
+            android:orientation="vertical"
+            android:layout_margin="16dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/alt_name_ingredient_spinner_textview" />
+
+            <Spinner
+                android:id="@+id/altNameSpinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:padding="16dp">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:minWidth="@dimen/ingredient_popup_button_dimension"
+            android:gravity="center">
+
+            <Button
+                android:id="@+id/dateButton"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/date_quantity_button_picker_height"
+                android:drawableEnd="@drawable/ic_calendar_black_24dp"
+                android:text="@string/date_button_default_text"
+                android:width="@dimen/ingredient_popup_button_dimension" />
+
+            <Button
+                android:id="@+id/cancelButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/cancel_button_text"
+                android:backgroundTint="@color/cancel_button"
+                android:width="@dimen/ingredient_popup_button_dimension" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:minWidth="@dimen/ingredient_popup_button_dimension"
+            android:gravity="center"
+            android:layout_marginStart="@dimen/ingredient_vertical_layout_margin">
+
+            <NumberPicker
+                android:id="@+id/quantityPicker"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/date_quantity_button_picker_height"/>
+
+            <Button
+                android:id="@+id/applyButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/apply_button_text"
+                android:backgroundTint="@color/confirm_button"
+                android:width="@dimen/ingredient_popup_button_dimension"/>
+
+        </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

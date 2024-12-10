@@ -10,13 +10,13 @@ import com.example.ecodigify.dataclass.RecipeFull
 @Dao
 interface RecipeFullDao {
     @Query("SELECT * FROM recipefull")
-    fun getAll(): List<RecipeFull>
+    suspend fun getAll(): List<RecipeFull>
 
     @Query("SELECT * FROM recipefull WHERE id = :id")
-    fun get(id: Int): RecipeFull
+    suspend fun get(id: Int): RecipeFull?
 
     @Query("SELECT * FROM recipefull WHERE name = :name")
-    fun get(name: String): RecipeFull
+    suspend fun get(name: String): RecipeFull?
 
     /**
      * Add one or more RecipeFull class to the database
@@ -34,7 +34,7 @@ interface RecipeFullDao {
      * <pre>
      */
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun add(vararg recipe: RecipeFull)
+    suspend fun add(vararg recipe: RecipeFull)
 
     /**
      * Remove one or more RecipeFull class from the database
@@ -52,11 +52,11 @@ interface RecipeFullDao {
      * <pre>
      */
     @Delete
-    fun remove(vararg recipe: RecipeFull)
+    suspend fun remove(vararg recipe: RecipeFull)
 
     @Query("DELETE FROM recipefull WHERE id = :id")
-    fun remove(id: Int)
+    suspend fun remove(id: Int)
 
     @Query("DELETE FROM ingredient")
-    fun clear()
+    suspend fun clear()
 }

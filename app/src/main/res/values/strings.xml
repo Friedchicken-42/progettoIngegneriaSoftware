@@ -1,6 +1,38 @@
 <resources>
     <string name="app_name">EcoDigify</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
+    <string name="title_ingredients">Ingredienti</string>
+    <string name="title_search">Ricerca</string>
+    <string name="title_favourites">Preferiti</string>
+    <string name="text_scan_button">Scansiona un Ingrediente</string>
+    <string name="default_ingredient_title_text">Titolo Ingrediente</string>
+    <string name="noIngredientsText">Scansiona un ingrediente per aggiungerlo</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="cancel_button_text">Annulla</string>
+    <string name="apply_button_text">Applica</string>
+    <string name="date_button_default_text">Data Scadenza</string>
+    <string name="alt_name_ingredient_spinner_textview">Nome Alternativo</string>
+    <string name="filter_button_description_text">Mostra i Filtri</string>
+    <string name="noRecipesText">Nessuna ricetta trovata</string>
+    <string name="recipe_search_hint">Nome della ricetta</string>
+    <string name="recipe_default_title">Nome Ricetta</string>
+    <string name="recipe_image_description">Immagine della ricetta</string>
+    <string name="default_servings_text">Per X persone</string>
+    <string name="default_recipes_steps_text">Ingredienti\n- ingrediente 1\n- ingrediente 2\n...\nRicetta\n1. passaggio 1\n2. passaggio 2\n...</string>
+    <string name="single_recipe_format_string">Ingredienti:\n%1$s\n\nPassaggi:\n%2$s</string>
+    <string name="recipe_source_button_text">Sorgente</string>
+    <string name="favourite_button_under_text">Salva</string>
+    <string name="favourite_button_description_text">Salva la ricetta nei preferiti</string>
+    <string name="no_barcode_detected_text">Nessun barcode trovato nell\'immagine</string>
+    <string name="barcode_error_message_text">Errore nella lettura del barcode</string>
+    <string name="barcode_process_error_message_text">Errore nel processare il barcode</string>
+    <string name="no_image_taken_text">Nessuna scansione avvenuta</string>
+    <string name="camera_permission_error">Autorizzazione della fotocamera negata</string>
+    <string name="required_ingredient_format_string">%1$s (%2$s)</string>
+    <string name="add_new_name_text">Aggiungi nome alternativo...</string>
+    <string name="add_new_name_title_text">Nuovo nome alternativo</string>
 </resources>

@@ -7,4 +7,15 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <color name="progress_green">#4CAF50</color>
+    <color name="progress_yellow">#FFEB3B</color>
+    <color name="progress_red">#F44336</color>
+
+    <color name="cancel_button">#F44336</color>
+    <color name="confirm_button">#8BC34A</color>
+
+    <color name="ingredient_missing">#F44336</color>
+    <color name="ingredient_present">#8BC34A</color>
+
 </resources>
