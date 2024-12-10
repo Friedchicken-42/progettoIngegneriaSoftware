@@ -41,6 +41,7 @@ class PopupIngredientsActivity : AppCompatActivity() {
         val quantityPicker = findViewById<NumberPicker>(R.id.quantityPicker)
         val cancelButton = findViewById<Button>(R.id.cancelButton)
         val applyButton = findViewById<Button>(R.id.applyButton)
+        val deleteButton = findViewById<Button>(R.id.deleteIngredientButton)
 
         var ingredient = intent.getParcelableExtra<Ingredient>("INGREDIENT")
         val oldIngredient = ingredient
@@ -139,6 +140,20 @@ class PopupIngredientsActivity : AppCompatActivity() {
                      callback = {
                         Manager.ingredientRemove(it)
                         Manager.ingredientAdd(ingredient!!)
+                    },
+                    done = {}
+                )
+            }
+
+            finish()
+        }
+
+        deleteButton.setOnClickListener {
+            oldIngredient?.let { it ->
+                run(
+                    lifecycle = lifecycle,
+                    callback = {
+                        Manager.ingredientRemove(it)
                     },
                     done = {}
                 )
