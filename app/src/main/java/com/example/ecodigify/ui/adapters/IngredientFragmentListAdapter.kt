@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ecodigify.R
@@ -56,7 +57,7 @@ class IngredientFragmentListAdapter(private val dataSet: Array<Ingredient>, priv
 
         val daysSinceAdded: Float = Period.between(dataSet[position].addDate, LocalDate.now()).days.toFloat()
         val daysExpiration: Float =Period.between(dataSet[position].addDate, dataSet[position].expirationDate).days.toFloat()
-        val progress: Int = min((daysSinceAdded / daysExpiration * viewHolder.progressBar.max).toInt(), viewHolder.progressBar.max)
+        val progress: Int = min(((daysSinceAdded + 1) / (daysExpiration + 1) * viewHolder.progressBar.max).toInt(), viewHolder.progressBar.max)
 
         val context = viewHolder.itemView.context
         val progressColor = when {

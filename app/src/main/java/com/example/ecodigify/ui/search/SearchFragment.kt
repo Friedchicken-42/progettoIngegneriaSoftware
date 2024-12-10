@@ -1,9 +1,10 @@
 package com.example.ecodigify.ui.search
 
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
@@ -13,15 +14,17 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.ecodigify.Manager
 import com.example.ecodigify.R
-import com.example.ecodigify.ui.adapters.RecipeFragmentListAdapter
 import com.example.ecodigify.databinding.FragmentSearchBinding
-import com.example.ecodigify.dataclass.Recipe
-import com.example.ecodigify.ui.popup.PopupRecipeActivity
-import android.view.Menu
-import com.example.ecodigify.dataclass.Ingredient
 import com.example.ecodigify.dataclass.RecipeFull
-import java.time.LocalDate
+import com.example.ecodigify.run
+import com.example.ecodigify.ui.adapters.DisplayIngredients
+import com.example.ecodigify.ui.adapters.RecipeFullFragmentListAdapter
+import com.example.ecodigify.ui.popup.PopupRecipeActivity
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 
 
 class SearchFragment : Fragment() {
@@ -31,6 +34,11 @@ class SearchFragment : Fragment() {
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
+
+    private var searchJob: Job? = null
+
+    // TODO: switch search
+    private var search: String = "cake"
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -56,9 +64,36 @@ class SearchFragment : Fragment() {
 
         val searchView: SearchView = binding.searchView
         val filterButton: ImageButton = binding.filterButton
-        var unWantedIngredients : MutableList<Int> = mutableListOf()
+        var unwantedIngredients: MutableList<Int> = mutableListOf()
 
         binding.recipeRecyclerView.layoutManager = LinearLayoutManager(requireContext())
+
+        binding.recipeRecyclerView.addOnItemTouchListener(object :
+            RecyclerView.OnItemTouchListener {
+            override fun onInterceptTouchEvent(rv: RecyclerView, e: MotionEvent): Boolean {
+                val view = rv.findChildViewUnder(e.x, e.y)
+                val ingredientsRecyclerView =
+                    view?.findViewById<RecyclerView>(R.id.recipeFullIngredientsRecyclerView)
+
+                if (ingredientsRecyclerView != null) {
+                    when (e.action) {
+                        MotionEvent.ACTION_DOWN, MotionEvent.ACTION_MOVE -> {
+                            val canScrollVertically =
+                                ingredientsRecyclerView.canScrollVertically(-1) || ingredientsRecyclerView.canScrollVertically(
+                                    1
+                                )
+                            rv.requestDisallowInterceptTouchEvent(canScrollVertically)
+                        }
+
+                        MotionEvent.ACTION_UP -> rv.requestDisallowInterceptTouchEvent(false)
+                    }
+                }
+                return false
+            }
+
+            override fun onTouchEvent(rv: RecyclerView, e: MotionEvent) {}
+            override fun onRequestDisallowInterceptTouchEvent(disallowIntercept: Boolean) {}
+        })
 
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
@@ -67,71 +102,98 @@ class SearchFragment : Fragment() {
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
-
                 if (newText != null) {
-                    // TODO: actually update the shown recipes from manager using filtered ingredients
-                    updateRecipes(emptyArray())
+                    searchJob?.cancel()
+                    searchJob = run(
+                        lifecycle = lifecycle,
+                        callback = {
+                            delay(250) // Debounce
+                            search = newText
+                            Manager.find(search)
+                        },
+                        done = { recipes -> updateRecipes(recipes.toTypedArray()) },
+                        error = { updateRecipes(emptyArray()) }
+                    )
                 }
+
                 return true
             }
         })
 
-
-        // TODO: get some ingredients from the manager?
-        val ingredients: Array<Ingredient> = arrayOf(
-            Ingredient(1, "ing XD", LocalDate.now(), LocalDate.now(), emptyList(), "4"),
-            Ingredient(2, "ing D:", LocalDate.now(), LocalDate.now(), emptyList(), "5"),
-            Ingredient(3, "ing :D", LocalDate.now(), LocalDate.now(), emptyList(), "6"),
-        )
-
         val popFilterMenu = PopupMenu(activity, filterButton)
 
-        for (ing in ingredients) {
-            val itm = popFilterMenu.menu.add(Menu.NONE, ing.id.toInt(), Menu.NONE, ing.name) // Cast might be problematic!
-            itm.isCheckable = true
-            itm.isChecked = true
-        }
+        run(
+            lifecycle = lifecycle,
+            callback = Manager::ingredientGetAll,
+            done = { ingredients ->
+
+                for (i in ingredients.indices) {
+                    val itm = popFilterMenu.menu.add(
+                        Menu.NONE,
+                        i,
+                        Menu.NONE,
+                        ingredients[i].name
+                    )
+                    itm.isCheckable = true
+                    itm.isChecked = true
+                }
+            }
+        )
 
         filterButton.setOnClickListener {
             popFilterMenu.menuInflater.inflate(R.menu.search_filter_menu, popFilterMenu.menu)
             popFilterMenu.setOnMenuItemClickListener { menuItem ->
                 if (menuItem.isChecked) {
-                    unWantedIngredients.add(menuItem.itemId)
+                    unwantedIngredients.add(menuItem.itemId)
                 } else {
-                    unWantedIngredients.remove(menuItem.itemId)
+                    unwantedIngredients.remove(menuItem.itemId)
                 }
                 menuItem.isChecked = !menuItem.isChecked
 
-                // TODO: get new filtered recipes from the manager
+                run(
+                    lifecycle = lifecycle,
+                    callback = {
+                        val ingredients = Manager.ingredientGetAll()
+                        val unwantedNames = ingredients
+                            .filterIndexed { i, _ -> unwantedIngredients.contains(i) }
+                            .map { i -> i.name }
+
+                        Manager.find(search)
+                            .filter { recipe ->
+                                recipe.ingredients.all { (name, _) -> !unwantedNames.contains(name) }
+                            }
+                    },
+                    done = { recipes -> updateRecipes(recipes.toTypedArray()) },
+                    error = { updateRecipes(emptyArray()) }
+                )
 
                 true
             }
             popFilterMenu.show()
         }
 
-        // TODO: get some recipes from the manager?
-        updateRecipes(arrayOf(
-            Recipe(1, "newText", Uri.parse("https://i.pinimg.com/736x/71/8c/3b/718c3b7a85ab9f7085807ececae7ca78.jpg")),
-            Recipe(1, "newText", Uri.parse("https://i.pinimg.com/736x/71/8c/3b/718c3b7a85ab9f7085807ececae7ca78.jpg")),
-            Recipe(1, "newText", Uri.parse("https://i.pinimg.com/736x/71/8c/3b/718c3b7a85ab9f7085807ececae7ca78.jpg")),
-            Recipe(1, "newText", Uri.parse("https://i.pinimg.com/736x/71/8c/3b/718c3b7a85ab9f7085807ececae7ca78.jpg")),
-            Recipe(1, "newText", Uri.parse("https://i.pinimg.com/736x/71/8c/3b/718c3b7a85ab9f7085807ececae7ca78.jpg")),
-            Recipe(1, "newText", Uri.parse("https://i.pinimg.com/736x/71/8c/3b/718c3b7a85ab9f7085807ececae7ca78.jpg")),
-            Recipe(1, "newText", Uri.parse("https://i.pinimg.com/736x/71/8c/3b/718c3b7a85ab9f7085807ececae7ca78.jpg"))
-        ))
-
+        run(
+            lifecycle = lifecycle,
+            callback = {
+                Manager.find(search)
+                    .take(10) // TODO: Could union with `Manager.search`
+            },
+            done = { recipes -> updateRecipes(recipes.toTypedArray()) }
+        )
     }
 
-    private fun updateRecipes(recipes: Array<Recipe>) {
+    private fun updateRecipes(recipes: Array<RecipeFull>) {
         val recipeCount: Int = recipes.size
 
-        binding.recipeRecyclerView.adapter = RecipeFragmentListAdapter(
-            recipes
-        ) { rc -> adapterOnClick(rc) } // TODO: use manager to get full recipe
+        binding.recipeRecyclerView.adapter = RecipeFullFragmentListAdapter(
+            recipes,
+            emptyArray(),
+            DisplayIngredients.Hide,
+        ) { rc -> adapterOnClick(rc) }
 
         val searchViewModel =
             ViewModelProvider(this)[SearchViewModel::class.java]
-        (if(recipeCount == 0) view?.context?.getString(R.string.noRecipesText) else "")?.let {
+        (if (recipeCount == 0) view?.context?.getString(R.string.noRecipesText) else "")?.let {
             searchViewModel.updateText(
                 it
             )
@@ -144,17 +206,10 @@ class SearchFragment : Fragment() {
         _binding = null
     }
 
-    private fun adapterOnClick(recipe: Recipe) { // TODO: change to full recipe
+    private fun adapterOnClick(recipe: RecipeFull) {
         val intent = Intent(binding.root.context, PopupRecipeActivity()::class.java)
-        //intent.putExtra("RECIPE", recipe)
-        intent.putExtra("RECIPE", RecipeFull(
-            1,
-            "hardcoded recipe",
-            Uri.parse("https://pbs.twimg.com/media/CGlKn0FVAAAoqBJ?format=png"),
-            "istruzioni",
-            emptyList<Pair<String, String>>(),
-            source = Uri.parse("https://wikipedia.com")
-        ))
+        intent.putExtra("RECIPE", recipe)
         this.startActivity(intent)
+
     }
 }

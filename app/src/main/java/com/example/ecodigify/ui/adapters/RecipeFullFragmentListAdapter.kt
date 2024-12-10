@@ -1,22 +1,28 @@
 package com.example.ecodigify.ui.adapters
 
-import android.content.Intent
-import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.ecodigify.R
 import com.example.ecodigify.dataclass.Ingredient
-import com.example.ecodigify.dataclass.Recipe
 import com.example.ecodigify.dataclass.RecipeFull
-import com.example.ecodigify.ui.popup.PopupIngredientsActivity
-import com.example.ecodigify.ui.popup.PopupRecipeActivity
 
-class RecipeFullFragmentListAdapter(private val dataSet: Array<RecipeFull>, private val onClick: (RecipeFull) -> Unit) :
+enum class DisplayIngredients {
+    Hide,
+    Display,
+}
+
+class RecipeFullFragmentListAdapter(
+    private val dataSet: Array<RecipeFull>,
+    private val ingredients: Array<Ingredient>,
+    private val display: DisplayIngredients,
+    private val onClick: (RecipeFull) -> Unit
+) :
     RecyclerView.Adapter<RecipeFullFragmentListAdapter.ViewHolder>() {
 
     /**
@@ -24,7 +30,8 @@ class RecipeFullFragmentListAdapter(private val dataSet: Array<RecipeFull>, priv
      * (custom ViewHolder)
      */
 
-    class ViewHolder(view: View, val onClick: (RecipeFull) -> Unit) : RecyclerView.ViewHolder(view) {
+    class ViewHolder(view: View, val onClick: (RecipeFull) -> Unit) :
+        RecyclerView.ViewHolder(view) {
         // Define click listener for the ViewHolder's View
         val imageView: ImageView = view.findViewById(R.id.recipeFullImageView)
         val textView: TextView = view.findViewById(R.id.recipeFullTitleTextView)
@@ -47,9 +54,7 @@ class RecipeFullFragmentListAdapter(private val dataSet: Array<RecipeFull>, priv
                 .error(R.drawable.ic_noimage_black_24dp)
                 .into(imageView)
 
-            recyclerView.adapter = IngredientPairListFragmentListAdapter(
-                recipeFull.ingredients
-            ){}
+            recyclerView.layoutManager = LinearLayoutManager(itemView.context)
         }
     }
 
@@ -66,13 +71,17 @@ class RecipeFullFragmentListAdapter(private val dataSet: Array<RecipeFull>, priv
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
         viewHolder.bind(dataSet[position])
 
+        if (display == DisplayIngredients.Hide) return
+
         // Get element from your dataset at this position and replace the
         // contents of the view with that element
 
         viewHolder.textView.text = dataSet[position].name
 
         viewHolder.recyclerView.adapter = IngredientPairListFragmentListAdapter(
-            dataSet[position].ingredients
+            dataSet[position].ingredients,
+            ingredients,
+            display,
         ) { }
     }
 
