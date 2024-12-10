@@ -106,7 +106,7 @@ class SearchFragment : Fragment() {
                     searchJob?.cancel()
                     searchJob = run(
                         lifecycle = lifecycle,
-                        function = {
+                        callback = {
                             delay(250) // Debounce
                             search = newText
                             Manager.find(search)
@@ -124,7 +124,7 @@ class SearchFragment : Fragment() {
 
         run(
             lifecycle = lifecycle,
-            function = Manager::ingredientGetAll,
+            callback = Manager::ingredientGetAll,
             done = { ingredients ->
 
                 for (i in ingredients.indices) {
@@ -152,7 +152,7 @@ class SearchFragment : Fragment() {
 
                 run(
                     lifecycle = lifecycle,
-                    function = {
+                    callback = {
                         val ingredients = Manager.ingredientGetAll()
                         val unwantedNames = ingredients
                             .filterIndexed { i, _ -> unwantedIngredients.contains(i) }
@@ -174,7 +174,7 @@ class SearchFragment : Fragment() {
 
         run(
             lifecycle = lifecycle,
-            function = {
+            callback = {
                 Manager.find(search)
                     .take(10) // TODO: Could union with `Manager.search`
             },

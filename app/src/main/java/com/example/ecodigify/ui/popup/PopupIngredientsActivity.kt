@@ -136,7 +136,7 @@ class PopupIngredientsActivity : AppCompatActivity() {
             oldIngredient?.let { it ->
                 run(
                     lifecycle = lifecycle,
-                    function = {
+                     callback = {
                         Manager.ingredientRemove(it)
                         Manager.ingredientAdd(ingredient!!)
                     },

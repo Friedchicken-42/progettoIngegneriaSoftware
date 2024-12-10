@@ -1,5 +1,6 @@
 package com.example.ecodigify
 
+import android.content.Context
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.coroutineScope
 import com.example.ecodigify.api.IngredientApi
@@ -11,15 +12,16 @@ import com.example.ecodigify.db.AppDatabase
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import androidx.room.Room
 
 // Mainly glue between `Api, Database` and `UI`
 object Manager {
-    val recipeApi = RecipeApi()
-    val ingredientApi = IngredientApi()
-    var db: AppDatabase? = null
+    private val recipeApi = RecipeApi()
+    private val ingredientApi = IngredientApi()
+    private var db: AppDatabase? = null
 
-    fun init(db: AppDatabase) {
-        this.db = db
+    fun init(applicationContext: Context) {
+        this.db = Room.databaseBuilder(applicationContext, AppDatabase::class.java, "Database").build()
     }
 
     suspend fun barcode(code: String): Ingredient {
@@ -73,14 +75,15 @@ object Manager {
 // if set, calls `cleanup` always
 fun <T> run(
     lifecycle: Lifecycle,
-    function: suspend () -> T,
-    done: (data: T) -> Unit,
+    callback: suspend () -> T,
+    done: ((data: T) -> Unit)? = null,
     error: ((Exception) -> Unit)? = null,
     cleanup: (() -> Unit)? = null,
 ): Job {
     return lifecycle.coroutineScope.launch {
         try {
-            done(function())
+            val out = callback()
+            done?.invoke(out)
         } catch (_: CancellationException) {
         } catch (e: Exception) {
             error?.invoke(e)

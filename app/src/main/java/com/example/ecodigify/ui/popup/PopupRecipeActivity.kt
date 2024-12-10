@@ -44,7 +44,7 @@ class PopupRecipeActivity : AppCompatActivity() {
         var fav = true
         run(
             lifecycle = lifecycle,
-            function = { Manager.recipeGet(recipe!!) }, // TODO: recipe could be null(?)
+            callback = { Manager.recipeGet(recipe!!) }, // TODO: recipe could be null(?)
             done = { r ->
                 fav = r != null
                 favoriteImageView.setImageResource(if (fav) R.drawable.ic_favorite_red_24dp else R.drawable.ic_favorite_black_24dp)
@@ -56,7 +56,7 @@ class PopupRecipeActivity : AppCompatActivity() {
             favoriteImageView.setImageResource(if (fav) R.drawable.ic_favorite_red_24dp else R.drawable.ic_favorite_black_24dp)
             run(
                 lifecycle = lifecycle,
-                function = {
+                callback = {
                     if (!fav) {
                         Manager.recipeRemove(recipe!!)
                     } else {

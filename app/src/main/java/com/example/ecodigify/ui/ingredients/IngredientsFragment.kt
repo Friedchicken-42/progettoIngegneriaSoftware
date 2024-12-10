@@ -113,7 +113,7 @@ class IngredientsFragment : Fragment() {
                     barcodeValue?.let { barcode ->
                         run(
                             lifecycle = lifecycle,
-                            function = { Manager.barcode(barcode) },
+                            callback = { Manager.barcode(barcode) },
                             done = { ingredient -> adapterOnClick(ingredient) },
                             error = {
                                 Toast.makeText(
@@ -161,7 +161,7 @@ class IngredientsFragment : Fragment() {
     private fun displayIngredients() {
         run(
             lifecycle = lifecycle,
-            function = Manager::ingredientGetAll,
+            callback = Manager::ingredientGetAll,
             done = { ingredients ->
                 var ingredients = ingredients.toTypedArray()
                 val ingredientCount = ingredients.size

@@ -5,13 +5,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
-import androidx.room.Room
 import com.example.ecodigify.databinding.ActivityMainBinding
-import com.example.ecodigify.dataclass.Ingredient
-import com.example.ecodigify.db.AppDatabase
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import java.time.LocalDate
-import kotlin.arrayOf
 
 class MainActivity : AppCompatActivity() {
 
@@ -20,9 +15,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val db =
-            Room.databaseBuilder(applicationContext, AppDatabase::class.java, "Database").build()
-        Manager.init(db)
+        Manager.init(applicationContext)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)

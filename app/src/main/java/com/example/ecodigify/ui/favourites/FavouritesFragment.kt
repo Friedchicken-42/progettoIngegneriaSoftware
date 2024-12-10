@@ -102,7 +102,7 @@ class FavouritesFragment : Fragment() {
     private fun display() {
         run(
             lifecycle = lifecycle,
-            function = { Pair(Manager.recipeGetAll(), Manager.ingredientGetAll()) },
+            callback = { Pair(Manager.recipeGetAll(), Manager.ingredientGetAll()) },
             done = { (recipes, ingredients) ->
                 binding.favouritesRecyclerView.adapter =
                     RecipeFullFragmentListAdapter(
