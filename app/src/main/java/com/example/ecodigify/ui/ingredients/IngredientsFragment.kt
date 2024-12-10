@@ -55,7 +55,7 @@ class IngredientsFragment : Fragment() {
             textView.text = it
         }
 
-        var takePictureLauncher =
+        val takePictureLauncher =
             registerForActivityResult(ActivityResultContracts.TakePicturePreview()) { bitmap ->
                 bitmap?.let {
                     processBarcodeImage(it)
@@ -67,7 +67,7 @@ class IngredientsFragment : Fragment() {
                     ).show()
                 }
             }
-        var requestPermissionLauncher =
+        val requestPermissionLauncher =
             registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
                 if (isGranted) {
                     takePictureLauncher.launch(null) // Open the camera if permission is granted
