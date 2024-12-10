@@ -38,7 +38,7 @@ class FavouritesFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         val favouritesViewModel =
-            ViewModelProvider(this).get(FavouritesViewModel::class.java)
+            ViewModelProvider(this)[FavouritesViewModel::class.java]
 
         _binding = FragmentFavouritesBinding.inflate(inflater, container, false)
         val root: View = binding.root
@@ -113,7 +113,7 @@ class FavouritesFragment : Fragment() {
                     )
 
                 val favouritesViewModel =
-                    ViewModelProvider(this).get(FavouritesViewModel::class.java)
+                    ViewModelProvider(this)[FavouritesViewModel::class.java]
 
                 favouritesViewModel.updateText(
                     if (recipes.isEmpty()) {
