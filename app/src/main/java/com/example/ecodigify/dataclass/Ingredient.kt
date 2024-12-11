@@ -68,7 +68,7 @@ object LocalDateSerializer : KSerializer<LocalDate> {
 data class Ingredient(
     @PrimaryKey
     val id: Long,
-    val name: String,
+    var name: String,
     @Serializable(with = LocalDateSerializer::class)
     @ColumnInfo(name = "add_date")
     val addDate: LocalDate,

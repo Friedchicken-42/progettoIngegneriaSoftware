@@ -122,6 +122,7 @@ class PopupIngredientsActivity : AppCompatActivity() {
                     val newItemName = input.text.toString()
                     if (newItemName.isNotBlank()) {
                         ingredient?.possibleNames = ingredient?.possibleNames?.plus(listOf(newItemName))!!
+                        ingredient?.name = newItemName
 
                         runOnUiThread {
                             val adapter = altNameSpinner.adapter as ArrayAdapter<String>
