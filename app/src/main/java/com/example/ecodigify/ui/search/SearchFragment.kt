@@ -152,17 +152,7 @@ class SearchFragment : Fragment() {
 
                 run(
                     lifecycle = lifecycle,
-                    callback = {
-                        val ingredients = Manager.ingredientGetAll()
-                        val unwantedNames = ingredients
-                            .filterIndexed { i, _ -> unwantedIngredients.contains(i) }
-                            .map { i -> i.name }
-
-                        Manager.find(search)
-                            .filter { recipe ->
-                                recipe.ingredients.all { (name, _) -> !unwantedNames.contains(name) }
-                            }
-                    },
+                    callback = { Manager.filter(search, unwantedIngredients) },
                     done = { recipes -> updateRecipes(recipes.toTypedArray()) },
                     error = { updateRecipes(emptyArray()) }
                 )

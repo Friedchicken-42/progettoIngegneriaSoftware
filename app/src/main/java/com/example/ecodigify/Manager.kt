@@ -3,6 +3,7 @@ package com.example.ecodigify
 import android.content.Context
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.coroutineScope
+import androidx.room.Room
 import com.example.ecodigify.api.IngredientApi
 import com.example.ecodigify.api.RecipeApi
 import com.example.ecodigify.dataclass.Ingredient
@@ -12,7 +13,6 @@ import com.example.ecodigify.db.AppDatabase
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import androidx.room.Room
 
 // Mainly glue between `Api, Database` and `UI`
 object Manager {
@@ -25,6 +25,10 @@ object Manager {
             Room.databaseBuilder(applicationContext, AppDatabase::class.java, "Database").build()
     }
 
+    fun close() {
+        db.close()
+    }
+
     suspend fun barcode(code: String): Ingredient {
         return ingredientApi.search(code)
     }
@@ -33,12 +37,23 @@ object Manager {
         return recipeApi.search(ing)
     }
 
-    suspend fun find(ing: String): List<RecipeFull> {
-        return recipeApi.find(ing)
+    suspend fun find(name: String): List<RecipeFull> {
+        return recipeApi.find(name)
     }
 
     suspend fun inflate(recipe: Recipe): RecipeFull {
         return recipeApi.inflate(recipe)
+    }
+
+    suspend fun filter(name: String, unwanted: List<Int>): List<RecipeFull> {
+        val unwantedNames = ingredientGetAll()
+            .filterIndexed { i, _ -> unwanted.contains(i) }
+            .map { i -> i.name }
+
+        return find(name)
+            .filter { recipe ->
+                recipe.ingredients.all { (name, _) -> !unwantedNames.contains(name) }
+            }
     }
 
     suspend fun recipeGetAll(): List<RecipeFull> {
