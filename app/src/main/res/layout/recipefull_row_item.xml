@@ -12,6 +12,7 @@
         android:id="@+id/recipeFullImageView"
         android:layout_width="70dp"
         android:layout_height="70dp"
+        android:importantForAccessibility="no"
         app:srcCompat="@drawable/ic_noimage_black_24dp" />
 
     <LinearLayout

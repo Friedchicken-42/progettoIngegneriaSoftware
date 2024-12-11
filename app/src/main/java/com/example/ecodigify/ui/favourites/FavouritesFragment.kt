@@ -38,7 +38,7 @@ class FavouritesFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         val favouritesViewModel =
-            ViewModelProvider(this).get(FavouritesViewModel::class.java)
+            ViewModelProvider(this)[FavouritesViewModel::class.java]
 
         _binding = FragmentFavouritesBinding.inflate(inflater, container, false)
         val root: View = binding.root
@@ -61,9 +61,9 @@ class FavouritesFragment : Fragment() {
         binding.favouritesRecyclerView.addOnItemTouchListener(object :
             RecyclerView.OnItemTouchListener {
             override fun onInterceptTouchEvent(rv: RecyclerView, e: MotionEvent): Boolean {
-                val view = rv.findChildViewUnder(e.x, e.y)
+                val viewChild = rv.findChildViewUnder(e.x, e.y)
                 val ingredientsRecyclerView =
-                    view?.findViewById<RecyclerView>(R.id.recipeFullIngredientsRecyclerView)
+                    viewChild?.findViewById<RecyclerView>(R.id.recipeFullIngredientsRecyclerView)
 
                 if (ingredientsRecyclerView != null) {
                     when (e.action) {
@@ -108,12 +108,11 @@ class FavouritesFragment : Fragment() {
                     RecipeFullFragmentListAdapter(
                         recipes.toTypedArray(),
                         ingredients.toTypedArray(),
-                        DisplayIngredients.Display,
-                        { ing -> adapterOnClick(ing) }
-                    )
+                        DisplayIngredients.Display
+                    ) { ing -> adapterOnClick(ing) }
 
                 val favouritesViewModel =
-                    ViewModelProvider(this).get(FavouritesViewModel::class.java)
+                    ViewModelProvider(this)[FavouritesViewModel::class.java]
 
                 favouritesViewModel.updateText(
                     if (recipes.isEmpty()) {

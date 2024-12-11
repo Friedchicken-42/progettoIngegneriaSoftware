@@ -64,16 +64,16 @@ class SearchFragment : Fragment() {
 
         val searchView: SearchView = binding.searchView
         val filterButton: ImageButton = binding.filterButton
-        var unwantedIngredients: MutableList<Int> = mutableListOf()
+        val unwantedIngredients: MutableList<Int> = mutableListOf()
 
         binding.recipeRecyclerView.layoutManager = LinearLayoutManager(requireContext())
 
         binding.recipeRecyclerView.addOnItemTouchListener(object :
             RecyclerView.OnItemTouchListener {
             override fun onInterceptTouchEvent(rv: RecyclerView, e: MotionEvent): Boolean {
-                val view = rv.findChildViewUnder(e.x, e.y)
+                val viewChild = rv.findChildViewUnder(e.x, e.y)
                 val ingredientsRecyclerView =
-                    view?.findViewById<RecyclerView>(R.id.recipeFullIngredientsRecyclerView)
+                    viewChild?.findViewById<RecyclerView>(R.id.recipeFullIngredientsRecyclerView)
 
                 if (ingredientsRecyclerView != null) {
                     when (e.action) {

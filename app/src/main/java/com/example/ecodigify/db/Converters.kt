@@ -32,7 +32,7 @@ class Converters {
     class IngredientListToString {
         @TypeConverter
         fun ingredientListToString(ingredients: List<Pair<String, String>>): String {
-            var string = StringBuilder("[")
+            val string = StringBuilder("[")
 
             for (i in ingredients.indices) {
                 string.append("(")
@@ -45,7 +45,7 @@ class Converters {
 
         @TypeConverter
         fun stringToListIngredient(ingredients: String): List<Pair<String, String>> {
-            var list = mutableListOf<Pair<String, String>>()
+            val list = mutableListOf<Pair<String, String>>()
 
             var i = 0
             while (i < ingredients.length) {
@@ -72,7 +72,7 @@ class Converters {
     class PossibleNames {
         @TypeConverter
         fun namesListToString(names: List<String>): String {
-            var string = StringBuilder("[")
+            val string = StringBuilder("[")
 
             for (i in names.indices) {
                 if (i != 0) string.append(" | ")
