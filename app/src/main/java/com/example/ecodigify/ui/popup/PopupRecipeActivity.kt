@@ -52,6 +52,7 @@ class PopupRecipeActivity : AppCompatActivity() {
         val ingredientInstructionTextView = findViewById<TextView>(R.id.editTextTextMultiLine)
 
         // Get recipe data from intent
+        @Suppress("DEPRECATION")
         val recipe = intent.getParcelableExtra<RecipeFull>("RECIPE")
 
         // Set up source button listener
@@ -95,6 +96,7 @@ class PopupRecipeActivity : AppCompatActivity() {
                 .error(R.drawable.ic_noimage_black_24dp)
                 .into(recipeImageView)
             titleTextView.text = recipe.name
+
             servingsTextView.text = ""
             val formattedIngredients =
                 recipe.ingredients.joinToString("\n") { (name, quantity) -> "$name: $quantity" }

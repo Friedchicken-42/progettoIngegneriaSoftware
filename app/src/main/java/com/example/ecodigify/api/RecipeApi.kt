@@ -72,6 +72,7 @@ class RecipeApi : Api() {
      */
     suspend fun inflate(recipe: Recipe): RecipeFull {
         val out: ApiList<RecipeFullApiOutput> = client.get("$url/lookup.php?i=${recipe.id}").body()
+        @Suppress("NAME_SHADOWING")
         val recipe = out.meals[0]
 
         return RecipeFull(

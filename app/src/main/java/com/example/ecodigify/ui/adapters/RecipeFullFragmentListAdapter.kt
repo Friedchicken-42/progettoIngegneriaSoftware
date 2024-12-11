@@ -51,7 +51,7 @@ class RecipeFullFragmentListAdapter(
      */
     class ViewHolder(view: View, val onClick: (RecipeFull) -> Unit) :
         RecyclerView.ViewHolder(view) {
-        val imageView: ImageView = view.findViewById(R.id.recipeFullImageView)
+        private val imageView: ImageView = view.findViewById(R.id.recipeFullImageView)
         val textView: TextView = view.findViewById(R.id.recipeFullTitleTextView)
         var recyclerView: RecyclerView = view.findViewById(R.id.recipeFullIngredientsRecyclerView)
 

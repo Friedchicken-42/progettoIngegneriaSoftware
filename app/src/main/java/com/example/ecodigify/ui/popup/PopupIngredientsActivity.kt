@@ -12,7 +12,6 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.NumberPicker
 import android.widget.Spinner
-import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -61,6 +60,7 @@ class PopupIngredientsActivity : AppCompatActivity() {
         val deleteButton = findViewById<Button>(R.id.deleteIngredientButton)
 
         // Get ingredient data from intent
+        @Suppress("DEPRECATION")
         var ingredient = intent.getParcelableExtra<Ingredient>("INGREDIENT")
         val oldIngredient = ingredient
 
@@ -118,7 +118,7 @@ class PopupIngredientsActivity : AppCompatActivity() {
                 input.inputType = InputType.TYPE_CLASS_TEXT
                 builder.setView(input)
 
-                builder.setPositiveButton(getString(R.string.apply_button_text)) { dialog, _ ->
+                builder.setPositiveButton(getString(R.string.apply_button_text)) { _, _ ->
                     val newItemName = input.text.toString()
                     if (newItemName.isNotBlank()) {
                         ingredient?.possibleNames = ingredient?.possibleNames?.plus(listOf(newItemName))!!
@@ -150,7 +150,7 @@ class PopupIngredientsActivity : AppCompatActivity() {
         }
 
         // Set up quantity picker listener
-        quantityPicker.setOnValueChangedListener { picker, oldValue, newValue ->
+        quantityPicker.setOnValueChangedListener { _, _, newValue ->
             ingredient =
                 ingredient?.copy(quantity = newValue.toString()) // TODO: check if this is correct (what about the 1/3 cup...)
         }
@@ -162,7 +162,7 @@ class PopupIngredientsActivity : AppCompatActivity() {
 
         // Set up apply button listener
         applyButton.setOnClickListener {
-            oldIngredient?.let { it ->
+            oldIngredient?.let {
                 run(
                     lifecycle = lifecycle,
                      callback = {

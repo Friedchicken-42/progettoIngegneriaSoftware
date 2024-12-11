@@ -25,17 +25,17 @@ class IngredientApi : Api() {
         // HTTP request
         val out: IngredientApiOutput = client.get("$url/$code?product_type=food").body()
 
-        val expirationDate = if (out.product.expiration_date.isNullOrEmpty()) {
+        val expirationDate = if (out.product.expirationDate.isNullOrEmpty()) {
             LocalDate.now().plusDays(7)
         } else {
-            val pattern = if (out.product.expiration_date.contains("-")) {
+            val pattern = if (out.product.expirationDate.contains("-")) {
                 DateTimeFormatter.ofPattern("yyyy-MM-dd")
             } else {
                 DateTimeFormatter.ofPattern("dd/MM/yyyy")
             }
 
             LocalDate.parse(
-                out.product.expiration_date,
+                out.product.expirationDate,
                 pattern
             )
         }
@@ -49,7 +49,7 @@ class IngredientApi : Api() {
         return Ingredient(
             id = out.code.toLong(),
             name = "",
-            possibleNames = out.product.categories_tags.map {
+            possibleNames = out.product.categoriesTags.map {
                 if (it.contains(":")) it.drop(3)
                 else it
             }.map { it.replace("-", " ") },
@@ -73,8 +73,8 @@ class IngredientApi : Api() {
      */
     @Serializable
     private data class ProductApiOutput(
-        val categories_tags: List<String>,
-        val expiration_date: String? = null,
+        val categoriesTags: List<String>,
+        val expirationDate: String? = null,
         val quantity: String? = null,
     )
 }

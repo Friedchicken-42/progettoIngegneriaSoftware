@@ -22,7 +22,7 @@
     <string name="recipe_default_title">Nome Ricetta</string>
     <string name="recipe_image_description">Immagine della ricetta</string>
     <string name="default_servings_text">Per X persone</string>
-    <string name="default_recipes_steps_text">Ingredienti\n- ingrediente 1\n- ingrediente 2\n...\nRicetta\n1. passaggio 1\n2. passaggio 2\n...</string>
+    <string name="default_recipes_steps_text">Ingredienti\n- ingrediente 1\n- ingrediente 2\n…\nRicetta\n1. passaggio 1\n2. passaggio 2\n…</string>
     <string name="single_recipe_format_string">Ingredienti:\n%1$s\n\nPassaggi:\n%2$s</string>
     <string name="recipe_source_button_text">Sorgente</string>
     <string name="favourite_button_under_text">Salva</string>
@@ -33,7 +33,7 @@
     <string name="no_image_taken_text">Nessuna scansione avvenuta</string>
     <string name="camera_permission_error">Autorizzazione della fotocamera negata</string>
     <string name="required_ingredient_format_string">%1$s (%2$s)</string>
-    <string name="add_new_name_text">Aggiungi nome alternativo...</string>
+    <string name="add_new_name_text">Aggiungi nome alternativo…</string>
     <string name="add_new_name_title_text">Nuovo nome alternativo</string>
     <string name="delete_ingredient_button_text">Elimina Ingrediente</string>
 </resources>

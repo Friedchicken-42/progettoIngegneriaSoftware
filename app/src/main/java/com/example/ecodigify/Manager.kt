@@ -25,7 +25,7 @@ import androidx.room.Room
 object Manager {
     private val recipeApi = RecipeApi()
     private val ingredientApi = IngredientApi()
-    private var db: AppDatabase? = null
+    private lateinit var db: AppDatabase
 
     /**
      * Initializes the Manager with the application context.
@@ -36,7 +36,8 @@ object Manager {
      * @param applicationContext The application context.
      */
     fun init(applicationContext: Context) {
-        this.db = Room.databaseBuilder(applicationContext, AppDatabase::class.java, "Database").build()
+        this.db =
+            Room.databaseBuilder(applicationContext, AppDatabase::class.java, "Database").build()
     }
 
     /**
@@ -85,7 +86,7 @@ object Manager {
      * @return A list of all recipes.
      */
     suspend fun recipeGetAll(): List<RecipeFull> {
-        return db!!.recipesDao.getAll()
+        return db.recipesDao.getAll()
     }
 
     /**
@@ -95,7 +96,7 @@ object Manager {
      * @return The recipe if found, null otherwise.
      */
     suspend fun recipeGet(recipe: RecipeFull): RecipeFull? {
-        return db!!.recipesDao.get(recipe.id)
+        return db.recipesDao.get(recipe.id)
     }
 
     /**
@@ -104,7 +105,7 @@ object Manager {
      * @param recipe The recipe to remove.
      */
     suspend fun recipeRemove(recipe: RecipeFull) {
-        db!!.recipesDao.remove(recipe)
+        db.recipesDao.remove(recipe)
     }
 
     /**
@@ -113,7 +114,7 @@ object Manager {
      * @param recipe The recipe to add.
      */
     suspend fun recipeAdd(recipe: RecipeFull) {
-        db!!.recipesDao.add(recipe)
+        db.recipesDao.add(recipe)
     }
 
     /**
@@ -122,7 +123,7 @@ object Manager {
      * @return A list of all ingredients.
      */
     suspend fun ingredientGetAll(): List<Ingredient> {
-        return db!!.ingredientsDao.getAll()
+        return db.ingredientsDao.getAll()
     }
 
     /**
@@ -131,7 +132,7 @@ object Manager {
      * @param ingredient The ingredient to remove.
      */
     suspend fun ingredientRemove(ingredient: Ingredient) {
-        db!!.ingredientsDao.remove(ingredient)
+        db.ingredientsDao.remove(ingredient)
     }
 
     /**
@@ -140,7 +141,7 @@ object Manager {
      * @param ingredient The ingredient to add.
      */
     suspend fun ingredientAdd(ingredient: Ingredient) {
-        db!!.ingredientsDao.add(ingredient)
+        db.ingredientsDao.add(ingredient)
     }
 }
 
