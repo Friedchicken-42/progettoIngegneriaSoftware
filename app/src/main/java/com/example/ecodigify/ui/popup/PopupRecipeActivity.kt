@@ -95,8 +95,7 @@ class PopupRecipeActivity : AppCompatActivity() {
                 .error(R.drawable.ic_noimage_black_24dp)
                 .into(recipeImageView)
             titleTextView.text = recipe.name
-            servingsTextView.text =
-                "99 piatti in fila per sei con il resto di 2" // TODO: fix with actual servings
+            servingsTextView.text = ""
             val formattedIngredients =
                 recipe.ingredients.joinToString("\n") { (name, quantity) -> "$name: $quantity" }
             ingredientInstructionTextView.text = getString(
