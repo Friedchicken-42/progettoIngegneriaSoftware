@@ -3,6 +3,7 @@ package com.example.ecodigify.api
 import com.example.ecodigify.dataclass.Ingredient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -59,8 +60,8 @@ class IngredientApi : Api() {
 
     @Serializable
     private data class ProductApiOutput(
-        val categoriesTags: List<String>,
-        val expirationDate: String? = null,
+        @SerialName("categories_tags") val categoriesTags: List<String>,
+        @SerialName("expiration_date") val expirationDate: String? = null,
         val quantity: String? = null,
     )
 }

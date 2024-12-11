@@ -71,5 +71,5 @@ dependencies {
 
     implementation(libs.glide)
 
-
+    testImplementation(libs.kotlinx.coroutines.test)
 }
