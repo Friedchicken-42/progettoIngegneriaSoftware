@@ -4,7 +4,16 @@ import android.net.Uri
 import androidx.room.TypeConverter
 import java.time.LocalDate
 
+/**
+ * Provides type converters for Room database.
+ *
+ * This class contains nested classes that define type converters for various data types,
+ * allowing them to be stored and retrieved from the Room database.
+ */
 class Converters {
+    /**
+     * Converts between [LocalDate] and [String].
+     */
     class LocalDateToString {
         @TypeConverter
         fun localDateToString(date: LocalDate): String {
@@ -17,6 +26,9 @@ class Converters {
         }
     }
 
+    /**
+     * Converts between [Uri] and [String].
+     */
     class UriToString {
         @TypeConverter
         fun uriToString(uri: Uri): String {
@@ -29,6 +41,10 @@ class Converters {
         }
     }
 
+    /**
+     * Converts between a list of ingredient pairs ([List]<[Pair]<[String], [String]>>)
+     * and [String].
+     */
     class IngredientListToString {
         @TypeConverter
         fun ingredientListToString(ingredients: List<Pair<String, String>>): String {
@@ -69,6 +85,9 @@ class Converters {
         }
     }
 
+    /**
+     * Converts between a list of names ([List]<[String]>) and [String].
+     */
     class PossibleNames {
         @TypeConverter
         fun namesListToString(names: List<String>): String {

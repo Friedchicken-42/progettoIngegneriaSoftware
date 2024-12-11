@@ -7,12 +7,20 @@ import kotlinx.serialization.Serializable
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
+/**
+ * API that retrieves ingredients from the OpenFoodFacts API
+ */
 class IngredientApi : Api() {
     private val url = "https://world.openfoodfacts.net/api/v2/product"
 
     // Use only the first number found
     private val regex = "\\d+".toRegex()
 
+    /**
+     * Retrieves an ingredient from the API given a specific barcode number
+     *
+     * @param code The barcode number of the ingredient.
+     */
     suspend fun search(code: String): Ingredient {
         // HTTP request
         val out: IngredientApiOutput = client.get("$url/$code?product_type=food").body()
@@ -51,12 +59,18 @@ class IngredientApi : Api() {
         )
     }
 
+    /**
+     * Output of the Api with the original barcode
+     */
     @Serializable
     private data class IngredientApiOutput(
         val code: String,
         val product: ProductApiOutput,
     )
 
+    /**
+     * Output of the Api without the original barcode and a quantity
+     */
     @Serializable
     private data class ProductApiOutput(
         val categoriesTags: List<String>,

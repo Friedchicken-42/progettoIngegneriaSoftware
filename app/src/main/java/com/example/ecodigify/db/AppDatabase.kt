@@ -7,6 +7,13 @@ import androidx.room.TypeConverters
 import com.example.ecodigify.dataclass.Ingredient
 import com.example.ecodigify.dataclass.RecipeFull
 
+/**
+ * The main database for the application.
+ *
+ * This abstract class represents the Room database for the application. It defines
+ * the database version, entities, and type converters. It also provides access
+ * to the data access objects (DAOs) for interacting with the database.
+ */
 @Database(
     version = 1,
     exportSchema = false,

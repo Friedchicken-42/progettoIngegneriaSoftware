@@ -8,18 +8,34 @@ import androidx.navigation.ui.setupWithNavController
 import com.example.ecodigify.databinding.ActivityMainBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
+/**
+ * Main activity of the application.
+ *
+ * This activity hosts the navigation components and initializes the application's
+ * data manager. It sets up the bottom navigation bar and handles navigation
+ * between the different fragments of the application.
+ */
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
 
+    /**
+     * Called when the activity is starting.
+     *
+     * @param savedInstanceState If the activity is being re-initialized after
+     * previously being shut down then this Bundle contains the data it most
+     * recently supplied in onSaveInstanceState(Bundle). Note: Otherwise it is null.
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        // Initialize the application's data manager
         Manager.init(applicationContext)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // Set up bottom navigation
         val navView: BottomNavigationView = binding.navView
 
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
