@@ -24,18 +24,35 @@ import com.example.ecodigify.run
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
-
+/**
+ * Activity for displaying and editing ingredient details in a "popup window".
+ *
+ * This activity allows the user to view and modify the details of an ingredient,
+ * including its name, alternative names, expiration date, and quantity. It
+ * provides UI elements for editing these fields and handles saving the changes
+ * back to the database.
+ */
 class PopupIngredientsActivity : AppCompatActivity() {
+
+    /**
+     * Called when the activity is starting.
+     *
+     * @param savedInstanceState If the activity is being re-initialized after
+     * previously being shut down then this Bundle contains the data it most
+     * recently supplied in onSaveInstanceState(Bundle). Note: Otherwise it is null.
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_popup_ingredients)
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
 
+        // Get UI elements
         val altNameSpinner = findViewById<Spinner>(R.id.altNameSpinner)
         val dateButton = findViewById<Button>(R.id.dateButton)
         val quantityPicker = findViewById<NumberPicker>(R.id.quantityPicker)
@@ -43,12 +60,14 @@ class PopupIngredientsActivity : AppCompatActivity() {
         val applyButton = findViewById<Button>(R.id.applyButton)
         val deleteButton = findViewById<Button>(R.id.deleteIngredientButton)
 
+        // Get ingredient data from intent
         var ingredient = intent.getParcelableExtra<Ingredient>("INGREDIENT")
         val oldIngredient = ingredient
 
         var possibleNamesWithAdd: MutableList<String> = arrayListOf()
 
         ingredient?.let {
+            // Set up alternative names spinner
             possibleNamesWithAdd = it.possibleNames.toMutableList()
             possibleNamesWithAdd.add(getString(R.string.add_new_name_text))
             val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, possibleNamesWithAdd)
@@ -59,9 +78,11 @@ class PopupIngredientsActivity : AppCompatActivity() {
                 altNameSpinner.setSelection(currentNameIndex)
             }
 
+            // Set up expiration date button
             val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
             dateButton.text = it.expirationDate.format(formatter)
 
+            // Set up quantity picker
             val quantityRange = 1..12
             quantityPicker.minValue = quantityRange.first
             quantityPicker.maxValue = quantityRange.last
@@ -73,6 +94,7 @@ class PopupIngredientsActivity : AppCompatActivity() {
             quantityPicker.value = currentQuantity
         }
 
+        // Set up alternative names spinner listener
         altNameSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View?, pos: Int, id: Long) {
                 if (pos == possibleNamesWithAdd.size - 1) { // if new item has been selected
@@ -87,6 +109,7 @@ class PopupIngredientsActivity : AppCompatActivity() {
                 // No change
             }
 
+            // Show a dialog for adding a new alternative name.
             private fun showAddNewItemDialog() {
                 val builder = AlertDialog.Builder(altNameSpinner.context)
                 builder.setTitle(getString(R.string.add_new_name_title_text))
@@ -115,6 +138,7 @@ class PopupIngredientsActivity : AppCompatActivity() {
             }
         }
 
+        // Set up expiration date button listener
         dateButton.setOnClickListener {
             val currentDate =
                 LocalDate.parse(dateButton.text, DateTimeFormatter.ofPattern("dd/MM/yyyy"))
@@ -124,15 +148,18 @@ class PopupIngredientsActivity : AppCompatActivity() {
             }
         }
 
+        // Set up quantity picker listener
         quantityPicker.setOnValueChangedListener { picker, oldValue, newValue ->
             ingredient =
                 ingredient?.copy(quantity = newValue.toString()) // TODO: check if this is correct (what about the 1/3 cup...)
         }
 
+        // Set up cancel button listener
         cancelButton.setOnClickListener {
             finish()
         }
 
+        // Set up apply button listener
         applyButton.setOnClickListener {
             oldIngredient?.let { it ->
                 run(
@@ -148,6 +175,7 @@ class PopupIngredientsActivity : AppCompatActivity() {
             finish()
         }
 
+        // Set up delete button listener
         deleteButton.setOnClickListener {
             oldIngredient?.let { it ->
                 run(
@@ -163,6 +191,12 @@ class PopupIngredientsActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Shows a date picker dialog for selecting the expiration date.
+     *
+     * @param currentDate The current date to pre-select in the dialog.
+     * @param onDateSelected A lambda function to be called when a date is selected.
+     */
     private fun showDatePickerDialog(currentDate: LocalDate, onDateSelected: (LocalDate) -> Unit) {
         val calendar = Calendar.getInstance().apply {
             set(Calendar.YEAR, currentDate.year)

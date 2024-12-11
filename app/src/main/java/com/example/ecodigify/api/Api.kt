@@ -12,7 +12,13 @@ import io.ktor.http.HttpHeaders
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 
-// Base class for Http JSON requests
+/**
+ * Base class for Http JSON requests
+ *
+ * This class provides a basic setup for making API requests using Ktor's
+ * [HttpClient]. Subclasses can extend this class to implement specific
+ * API endpoints and interactions.
+ */
 open class Api {
     protected val client = HttpClient(Android) {
         install(ContentNegotiation) {

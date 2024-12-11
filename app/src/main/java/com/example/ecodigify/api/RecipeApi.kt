@@ -21,10 +21,18 @@ import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.int
 import kotlinx.serialization.json.jsonPrimitive
 
+/**
+ * API that retrieves recipes from the Themealdb API
+ */
 class RecipeApi : Api() {
     private val url = "https://www.themealdb.com/api/json/v1/1"
 
-    // Returns all the `Recipe` with a specific ingredient
+    /**
+     * Given an ingredient's name, find fitting recipes for it
+     *
+     * @param ingredient The name of the required ingredient
+     * @return Returns a list of `Recipe` with the specific ingredient
+     */
     suspend fun search(ingredient: String): List<Recipe> {
         val out: ApiList<RecipeApiOutput> = client.get("$url/filter.php?i=$ingredient").body()
         return out.meals.map { recipe ->
@@ -36,7 +44,12 @@ class RecipeApi : Api() {
         }
     }
 
-    // Returns all the `RecipeFull` that matches `name`
+    /**
+     * Given a recipe's name, find fitting recipes for it
+     *
+     * @param name The partial/full name of the recipe
+     * @return Returns a list of `RecipeFull` with the specific name
+     */
     suspend fun find(name: String): List<RecipeFull> {
         val out: ApiList<RecipeFullApiOutput> = client.get("$url/search.php?s=$name").body()
         return out.meals.map { recipe ->
@@ -51,7 +64,12 @@ class RecipeApi : Api() {
         }
     }
 
-    // Convert a `Recipe` into a `RecipeFull` by doing an id lookup
+    /**
+     * Given a recipe of type `Recipe`, retrieve all it's details by doing an id lookup
+     *
+     * @param recipe The recipe to add details to
+     * @return Returns a `RecipeFull` of the same recipe, but with more details
+     */
     suspend fun inflate(recipe: Recipe): RecipeFull {
         val out: ApiList<RecipeFullApiOutput> = client.get("$url/lookup.php?i=${recipe.id}").body()
         val recipe = out.meals[0]
@@ -66,12 +84,24 @@ class RecipeApi : Api() {
         )
     }
 
-    // Private classes that match the JSON format returned
+    /**
+     * Represents a list of items received from the API.
+     *
+     * @param E The type of items in the list.
+     * @property meals The list of items.
+     */
     @Serializable
     private data class ApiList<E>(
         val meals: List<E>
     )
 
+    /**
+     * Represents a basic recipe output from the API.
+     *
+     * @property strMeal The name of the recipe.
+     * @property strMealThumb The URL of the recipe's thumbnail image.
+     * @property idMeal The ID of the recipe.
+     */
     @Serializable
     private data class RecipeApiOutput(
         val strMeal: String,
@@ -79,6 +109,16 @@ class RecipeApi : Api() {
         val idMeal: Int,
     )
 
+    /**
+     * Represents a full recipe output from the API.
+     *
+     * @property idMeal The ID of the recipe.
+     * @property strMeal The name of the recipe.
+     * @property strMealThumb The URL of the recipe's thumbnail image.
+     * @property strInstructions The instructions for preparing the recipe.
+     * @property source The source of the recipe (e.g., website URL).
+     * @property ingredients A list of ingredient pairs, where each pair contains the ingredient name and its quantity.
+     */
     @Serializable(with = RecipeFullSerializer::class)
     data class RecipeFullApiOutput(
         val idMeal: Int,
@@ -89,7 +129,15 @@ class RecipeApi : Api() {
         val ingredients: List<Pair<String, String>>,
     )
 
-    // Custom deserializer for `RecipeFullApiOutput`
+    /**
+     * A custom serializer for [RecipeFullApiOutput] that handles the specific JSON structure
+     * received from the API.
+     *
+     * This serializer is responsible for converting the JSON data into a [RecipeFullApiOutput]
+     * object and vice versa. It handles the simple conversion of string and integer fields
+     * as well as the custom conversion of the ingredients list, which is stored in a
+     * specific format in the JSON data.
+     */
     object RecipeFullSerializer : KSerializer<RecipeFullApiOutput> {
         @OptIn(InternalSerializationApi::class, ExperimentalSerializationApi::class)
         override val descriptor: SerialDescriptor = buildClassSerialDescriptor("RecipeFull") {
@@ -111,6 +159,17 @@ class RecipeApi : Api() {
             TODO("Not necessary now")
         }
 
+        /**
+         * Deserializes a [RecipeFullApiOutput] object from the given [decoder].
+         *
+         * This function extracts the necessary data from the JSON object and creates
+         * a [RecipeFullApiOutput] instance. It handles the simple conversion of string
+         * and integer fields as well as the custom conversion of the ingredients list.
+         *
+         * @param decoder The decoder to use for deserialization.
+         * @return The deserialized [RecipeFullApiOutput] object.
+         * @throws SerializationException If any required data is missing or invalid.
+         */
         override fun deserialize(decoder: Decoder): RecipeFullApiOutput {
             require(decoder is JsonDecoder)
             val jsonObj = decoder.decodeJsonElement() as JsonObject
