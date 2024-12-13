@@ -22,6 +22,14 @@ import com.example.ecodigify.ui.adapters.DisplayIngredients
 import com.example.ecodigify.ui.adapters.RecipeFullFragmentListAdapter
 import com.example.ecodigify.ui.popup.PopupRecipeActivity
 
+/**
+ * Fragment for displaying the user's favorite recipes.
+ *
+ * This fragment shows a list of the user's favorite recipes, allowing them to
+ * view details and interact with each recipe. It uses a RecyclerView to display
+ * the recipes and handles navigation to a detailed recipe view when a recipe
+ * is clicked.
+ */
 class FavouritesFragment : Fragment() {
 
     private var _binding: FragmentFavouritesBinding? = null
@@ -32,6 +40,18 @@ class FavouritesFragment : Fragment() {
 
     private lateinit var activityResultLauncher: ActivityResultLauncher<Intent>
 
+    /**
+     * Creates the view for the fragment.
+     *
+     * @param inflater The LayoutInflater object that can be used to inflate
+     * any views in the fragment.
+     * @param container If non-null, this is the parent view that the fragment's
+     * UI should be attached to. The fragment should not add the view itself,
+     * but this can be used to generate the LayoutParams of the view.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed
+     * from a previous saved state as given here.
+     * @return The View for the fragment's UI.
+     */
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -55,15 +75,24 @@ class FavouritesFragment : Fragment() {
         return root
     }
 
+    /**
+     * Called immediately after onCreateView() has returned, giving subclasses a
+     * chance to initialize themselves once they have access to their view hierarchy.
+     *
+     * @param view The View returned by onCreateView(LayoutInflater, ViewGroup, Bundle)}.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed
+     * from a previous saved state as given here.
+     */
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.favouritesRecyclerView.layoutManager = LinearLayoutManager(requireContext())
 
+        // Set up OnItemTouchListener to handle nested RecyclerView scrolling
         binding.favouritesRecyclerView.addOnItemTouchListener(object :
             RecyclerView.OnItemTouchListener {
             override fun onInterceptTouchEvent(rv: RecyclerView, e: MotionEvent): Boolean {
                 val viewChild = rv.findChildViewUnder(e.x, e.y)
                 val ingredientsRecyclerView =
-                    viewChild?.findViewById<RecyclerView>(R.id.recipeFullIngredientsRecyclerView)
+                    viewChild?.findViewById<RecyclerView>(R.id.recipe_full_ingredients_recycler_view)
 
                 if (ingredientsRecyclerView != null) {
                     when (e.action) {
@@ -88,17 +117,35 @@ class FavouritesFragment : Fragment() {
         display()
     }
 
+    /**
+     * Called when the view previously created by onCreateView() is detached from
+     * the fragment.
+     */
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
 
+    /**
+     * Handles clicks on recipe items in the adapter.
+     *
+     * This method starts the PopupRecipeActivity with the selected recipe.
+     *
+     * @param recipeFull The [RecipeFull] object representing the clicked recipe.
+     */
     private fun adapterOnClick(recipeFull: RecipeFull) {
         val intent = Intent(binding.root.context, PopupRecipeActivity()::class.java)
         intent.putExtra("RECIPE", recipeFull)
         activityResultLauncher.launch(intent)
     }
 
+    /**
+     * Displays the favorite recipes in the RecyclerView.
+     *
+     * This method retrieves the recipes and ingredients from the manager and
+     * sets up the adapter for the RecyclerView. It also updates the ViewModel
+     * text based on whether there are any favorite recipes.
+     */
     private fun display() {
         run(
             lifecycle = lifecycle,
@@ -116,7 +163,7 @@ class FavouritesFragment : Fragment() {
 
                 favouritesViewModel.updateText(
                     if (recipes.isEmpty()) {
-                        requireView().context.getString(R.string.noRecipesText)
+                        requireView().context.getString(R.string.no_recipes_text)
                     } else {
                         ""
                     }

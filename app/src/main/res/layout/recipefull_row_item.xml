@@ -9,7 +9,7 @@
     android:orientation="horizontal">
 
     <ImageView
-        android:id="@+id/recipeFullImageView"
+        android:id="@+id/recipe_full_image_view"
         android:layout_width="70dp"
         android:layout_height="70dp"
         android:importantForAccessibility="no"
@@ -22,7 +22,7 @@
         android:layout_marginHorizontal="10dp">
 
         <TextView
-            android:id="@+id/recipeFullTitleTextView"
+            android:id="@+id/recipe_full_title_text_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/recipe_default_title"
@@ -30,7 +30,7 @@
             android:textStyle="bold" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recipeFullIngredientsRecyclerView"
+            android:id="@+id/recipe_full_ingredients_recycler_view"
             android:layout_width="match_parent"
             android:layout_height="49dp"
             android:nestedScrollingEnabled="false" />

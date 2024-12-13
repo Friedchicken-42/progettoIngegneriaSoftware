@@ -26,7 +26,13 @@ import com.example.ecodigify.ui.popup.PopupRecipeActivity
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 
-
+/**
+ * Fragment for searching and displaying recipes.
+ *
+ * This fragment allows the user to search for recipes by name or ingredients
+ * and displays the results in a RecyclerView. It also provides filtering
+ * options to refine the search results.
+ */
 class SearchFragment : Fragment() {
 
     private var _binding: FragmentSearchBinding? = null
@@ -40,6 +46,18 @@ class SearchFragment : Fragment() {
     // TODO: switch search
     private var search: String = "cake"
 
+    /**
+     * Creates the view for the fragment.
+     *
+     * @param inflater The LayoutInflater object that can be used to inflate
+     * any views in the fragment.
+     * @param container If non-null, this is the parent view that the fragment's
+     * UI should be attached to. The fragment should not add the view itself,
+     * but this can be used to generate the LayoutParams of the view.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed
+     * from a previous saved state as given here.
+     * @return The View for the fragment's UI.
+     */
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -59,6 +77,14 @@ class SearchFragment : Fragment() {
         return root
     }
 
+    /**
+     * Called immediately after onCreateView() has returned, giving subclasses a
+     * chance to initialize themselves once they have access to their view hierarchy.
+     *
+     * @param view The View returned by onCreateView(LayoutInflater, ViewGroup, Bundle)}.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed
+     * from a previous saved state as given here.
+     */
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -68,12 +94,13 @@ class SearchFragment : Fragment() {
 
         binding.recipeRecyclerView.layoutManager = LinearLayoutManager(requireContext())
 
+        // Set up OnItemTouchListener to handle nested RecyclerView scrolling
         binding.recipeRecyclerView.addOnItemTouchListener(object :
             RecyclerView.OnItemTouchListener {
             override fun onInterceptTouchEvent(rv: RecyclerView, e: MotionEvent): Boolean {
                 val viewChild = rv.findChildViewUnder(e.x, e.y)
                 val ingredientsRecyclerView =
-                    viewChild?.findViewById<RecyclerView>(R.id.recipeFullIngredientsRecyclerView)
+                    viewChild?.findViewById<RecyclerView>(R.id.recipe_full_ingredients_recycler_view)
 
                 if (ingredientsRecyclerView != null) {
                     when (e.action) {
@@ -95,6 +122,7 @@ class SearchFragment : Fragment() {
             override fun onRequestDisallowInterceptTouchEvent(disallowIntercept: Boolean) {}
         })
 
+        // Set up search view listener
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 this.onQueryTextChange(query)
@@ -120,6 +148,7 @@ class SearchFragment : Fragment() {
             }
         })
 
+        // Set up filter button and menu
         val popFilterMenu = PopupMenu(activity, filterButton)
 
         run(
@@ -172,6 +201,7 @@ class SearchFragment : Fragment() {
             popFilterMenu.show()
         }
 
+        // Initial recipe search
         run(
             lifecycle = lifecycle,
             callback = {
@@ -182,6 +212,11 @@ class SearchFragment : Fragment() {
         )
     }
 
+    /**
+     * Updates the displayed recipes in the RecyclerView.
+     *
+     * @param recipes The array of [RecipeFull] objects to display.
+     */
     private fun updateRecipes(recipes: Array<RecipeFull>) {
         val recipeCount: Int = recipes.size
 
@@ -193,19 +228,29 @@ class SearchFragment : Fragment() {
 
         val searchViewModel =
             ViewModelProvider(this)[SearchViewModel::class.java]
-        (if (recipeCount == 0) view?.context?.getString(R.string.noRecipesText) else "")?.let {
+        (if (recipeCount == 0) view?.context?.getString(R.string.no_recipes_text) else "")?.let {
             searchViewModel.updateText(
                 it
             )
         }
     }
 
-
+    /**
+     * Called when the view previously created by onCreateView() is detached from
+     * the fragment.
+     */
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
 
+    /**
+     * Handles clicks on recipe items in the adapter.
+     *
+     * This method starts the PopupRecipeActivity with the selected recipe.
+     *
+     * @param recipe The [RecipeFull] object representing the clicked recipe.
+     */
     private fun adapterOnClick(recipe: RecipeFull) {
         val intent = Intent(binding.root.context, PopupRecipeActivity()::class.java)
         intent.putExtra("RECIPE", recipe)
