@@ -27,6 +27,14 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.common.InputImage
 
+/**
+ * Fragment for displaying and managing the user's ingredients.
+ *
+ * This fragment shows a list of the user's ingredients, allowing them to
+ * view details, add new ingredients, and scan barcodes to quickly add
+ * ingredients. It uses a RecyclerView to display the ingredients and handles
+ * navigation to a detailed ingredient view when an ingredient is clicked.
+ */
 class IngredientsFragment : Fragment() {
 
     private var _binding: FragmentIngredientsBinding? = null
@@ -37,6 +45,18 @@ class IngredientsFragment : Fragment() {
 
     private lateinit var activityResultLauncher: ActivityResultLauncher<Intent>
 
+    /**
+     * Creates the view for the fragment.
+     *
+     * @param inflater The LayoutInflater object that can be used to inflate
+     * any views in the fragment.
+     * @param container If non-null, this is the parent view that the fragment's
+     * UI should be attached to. The fragment should not add the view itself,
+     * but this can be used to generate the LayoutParams of the view.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed
+     * from a previous saved state as given here.
+     * @return The View for the fragment's UI.
+     */
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -55,6 +75,7 @@ class IngredientsFragment : Fragment() {
             textView.text = it
         }
 
+        // Set up camera permission and barcode scanning behaviour
         val takePictureLauncher =
             registerForActivityResult(ActivityResultContracts.TakePicturePreview()) { bitmap ->
                 bitmap?.let {
@@ -95,6 +116,11 @@ class IngredientsFragment : Fragment() {
         return root
     }
 
+    /**
+     * Checks if the app has permission to use the camera.
+     *
+     * @return True if the app has camera permission, false otherwise.
+     */
     private fun isCameraPermissionGranted(): Boolean {
         return ContextCompat.checkSelfPermission(
             requireContext(),
@@ -102,6 +128,11 @@ class IngredientsFragment : Fragment() {
         ) == PackageManager.PERMISSION_GRANTED
     }
 
+    /**
+     * Processes the captured barcode image to extract ingredient information.
+     *
+     * @param bitmap The captured barcode image as a Bitmap.
+     */
     private fun processBarcodeImage(bitmap: Bitmap) {
         val image = InputImage.fromBitmap(bitmap, 0)
         val scanner = BarcodeScanning.getClient()
@@ -142,22 +173,48 @@ class IngredientsFragment : Fragment() {
             }
     }
 
+    /**
+     * Called immediately after onCreateView() has returned, giving subclasses a
+     * chance to initialize themselves once they have access to their view hierarchy.
+     *
+     * @param view The View returned by onCreateView(LayoutInflater, ViewGroup, Bundle)}.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed
+     * from a previous saved state as given here.
+     */
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.ingredientsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         displayIngredients()
     }
 
+    /**
+     * Called when the view previously created by onCreateView() is detached from
+     * the fragment.
+     */
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
 
+    /**
+     * Handles clicks on ingredient items in the adapter.
+     *
+     * This method starts the PopupIngredientsActivity with the selected ingredient.
+     *
+     * @param ingredient The [Ingredient] object representing the clicked ingredient.
+     */
     private fun adapterOnClick(ingredient: Ingredient) {
         val intent = Intent(binding.root.context, PopupIngredientsActivity()::class.java)
         intent.putExtra("INGREDIENT", ingredient)
         activityResultLauncher.launch(intent)
     }
 
+    /**
+     * Displays the ingredients in the RecyclerView.
+     *
+     * This method retrieves the ingredients from the database and sets up the
+     * adapter for the RecyclerView. It also updates the ViewModel text based
+     * on whether there are any ingredients.
+     */
     private fun displayIngredients() {
         run(
             lifecycle = lifecycle,

@@ -7,56 +7,86 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.example.ecodigify.dataclass.Ingredient
 
+/**
+ * Data Access Object for interacting with the `ingredient` table in the database.
+ *
+ * This interface defines methods for performing CRUD (Create, Read, Update, Delete)
+ * operations on the `ingredient` table. It uses Room annotations to map these
+ * methods to SQL queries.
+ */
 @Dao
 interface IngredientsDao {
+    /**
+     * Retrieves all ingredients from the database.
+     *
+     * @return A list of all ingredients.
+     */
     @Query("SELECT * FROM ingredient")
     suspend fun getAll(): List<Ingredient>
 
+    /**
+     * Retrieves an ingredient by its ID.
+     *
+     * @param id The ID of the ingredient to retrieve.
+     * @return The ingredient with the specified ID, or null if not found.
+     */
     @Query("SELECT * FROM ingredient WHERE id = :id")
     suspend fun get(id: Int): Ingredient
 
+    /**
+     * Retrieves an ingredient by its name.
+     *
+     * @param name The name of the ingredient to retrieve.
+     * @return The ingredient with the specified name, or null if not found.
+     */
     @Query("SELECT * FROM ingredient WHERE name = :name")
     suspend fun get(name: String): Ingredient
 
     /**
-     * Add one or more Ingredient class to the database
-     *
-     * You can either use the vararg as is:
+     * Adds one or more ingredients to the database.
+     * Either vararg:
      * <pre>
      * add(ingredient1, ingredient2)
      * </pre>
-     * or use the spread operator (*) on a list of array:
+     * or the spread operator (*) can be used:
      * <pre>
-     * // With an array
      * add(*myArray)
-     * // With a list
      * add(*myList.toTypedArray())
      * <pre>
+     *
+     * @param ingredient The ingredient(s) to add.
      */
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun add(vararg ingredient: Ingredient)
 
     /**
-     * Remove one or more Ingredient class from the database
-     *
-     * You can either use the vararg as is:
+     * Removes one or more ingredients from the database.
+     * Either vararg:
      * <pre>
      * remove(ingredient1, ingredient2)
      * </pre>
-     * or use the spread operator (*) on a list of array:
+     * or the spread operator (*) can be used:
      * <pre>
-     * // With an array
      * remove(*myArray)
-     * // With a list
      * remove(*myList.toTypedArray())
      * <pre>
+     *
+     * @param ingredient The ingredient(s) to remove.
      */
     @Delete
     suspend fun remove(vararg ingredient: Ingredient)
 
+    /**
+     * Removes an ingredient by its ID.
+     *
+     * @param id The ID of the ingredient to remove.
+     */
     @Query("DELETE FROM ingredient WHERE id = :id")
     suspend fun remove(id: Int)
 
+    /**
+     * Removes all ingredients from the database.
+     */
     @Query("DELETE FROM ingredient")
     suspend fun clear()
 }

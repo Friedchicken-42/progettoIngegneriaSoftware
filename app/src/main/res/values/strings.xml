@@ -17,7 +17,7 @@
     <string name="date_button_default_text">Data Scadenza</string>
     <string name="alt_name_ingredient_spinner_textview">Nome Alternativo</string>
     <string name="filter_button_description_text">Mostra i Filtri</string>
-    <string name="noRecipesText">Nessuna ricetta trovata</string>
+    <string name="no_recipes_text">Nessuna ricetta trovata</string>
     <string name="recipe_search_hint">Nome della ricetta</string>
     <string name="recipe_default_title">Nome Ricetta</string>
     <string name="recipe_image_description">Immagine della ricetta</string>
@@ -35,4 +35,10 @@
     <string name="required_ingredient_format_string">%1$s (%2$s)</string>
     <string name="add_new_name_text">Aggiungi nome alternativo…</string>
     <string name="add_new_name_title_text">Nuovo nome alternativo</string>
+    <string name="delete_ingredient_button_text">Elimina Ingrediente</string>
+    <!-- Notification messages -->
+    <string name="notification_title">Ingredient Expiration Notice</string>
+    <string name="before_expiration_date_msg">%1$s is about to go bad!</string>
+    <string name="on_expiration_date_msg">%1$s expires today!</string>
+    <string name="after_expiration_date_msg">%1$s has gone bad!</string>
 </resources>
