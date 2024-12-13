@@ -26,13 +26,13 @@
         android:gravity="center_vertical">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/ingredientsRecyclerView"
+            android:id="@+id/ingredients_recycler_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     </FrameLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/scanActionButton"
+        android:id="@+id/scan_action_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="18dp"

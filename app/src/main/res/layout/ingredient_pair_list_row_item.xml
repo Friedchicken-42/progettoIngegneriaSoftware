@@ -5,7 +5,7 @@
     android:layout_height="wrap_content">
 
     <TextView
-        android:id="@+id/ingredientPairTextView"
+        android:id="@+id/ingredient_pair_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"

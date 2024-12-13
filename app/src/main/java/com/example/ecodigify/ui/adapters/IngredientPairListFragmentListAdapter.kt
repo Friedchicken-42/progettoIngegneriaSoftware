@@ -42,7 +42,7 @@ class IngredientPairListFragmentListAdapter(
      */
     class ViewHolder(view: View, val onClick: (Pair<String, String>) -> Unit) :
         RecyclerView.ViewHolder(view) {
-        val textView: TextView = view.findViewById(R.id.ingredientPairTextView)
+        val textView: TextView = view.findViewById(R.id.ingredient_pair_text_view)
 
         private var currentIngredientString: Pair<String, String>? = null
 

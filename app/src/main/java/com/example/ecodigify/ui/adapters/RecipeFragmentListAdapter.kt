@@ -33,8 +33,8 @@ class RecipeFragmentListAdapter(private val dataSet: Array<Recipe>, private val 
      * @param onClick A lambda function that is called when the recipe item is clicked.
      */
     class ViewHolder(view: View, val onClick: (Recipe) -> Unit) : RecyclerView.ViewHolder(view) {
-        val imageView: ImageView = view.findViewById(R.id.recipeImageView)
-        val textView: TextView = view.findViewById(R.id.recipeTitleTextView)
+        val imageView: ImageView = view.findViewById(R.id.recipe_image_view)
+        val textView: TextView = view.findViewById(R.id.recipe_title_text_view)
 
         private var currentRecipe: Recipe? = null
 

@@ -100,7 +100,7 @@ class SearchFragment : Fragment() {
             override fun onInterceptTouchEvent(rv: RecyclerView, e: MotionEvent): Boolean {
                 val viewChild = rv.findChildViewUnder(e.x, e.y)
                 val ingredientsRecyclerView =
-                    viewChild?.findViewById<RecyclerView>(R.id.recipeFullIngredientsRecyclerView)
+                    viewChild?.findViewById<RecyclerView>(R.id.recipe_full_ingredients_recycler_view)
 
                 if (ingredientsRecyclerView != null) {
                     when (e.action) {
@@ -228,7 +228,7 @@ class SearchFragment : Fragment() {
 
         val searchViewModel =
             ViewModelProvider(this)[SearchViewModel::class.java]
-        (if (recipeCount == 0) view?.context?.getString(R.string.noRecipesText) else "")?.let {
+        (if (recipeCount == 0) view?.context?.getString(R.string.no_recipes_text) else "")?.let {
             searchViewModel.updateText(
                 it
             )

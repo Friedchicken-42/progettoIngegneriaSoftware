@@ -17,7 +17,7 @@
             android:layout_height="wrap_content">
 
             <ImageView
-                android:id="@+id/singleRecipeImageView"
+                android:id="@+id/single_recipe_image_view"
                 android:layout_width="150dp"
                 android:layout_height="150dp"
                 android:layout_margin="20dp"
@@ -32,7 +32,7 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/singleRecipeTitleTextView"
+                    android:id="@+id/single_recipe_title_text_view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
@@ -40,7 +40,7 @@
                     android:textSize="20sp" />
 
                 <TextView
-                    android:id="@+id/servingsTextView"
+                    android:id="@+id/servings_text_view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
@@ -53,7 +53,7 @@
                     android:layout_marginTop="20dp">
 
                     <Button
-                        android:id="@+id/sourceButton"
+                        android:id="@+id/source_button"
                         style="?android:attr/buttonBarButtonStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -98,7 +98,7 @@
         </LinearLayout>
 
         <EditText
-            android:id="@+id/editTextTextMultiLine"
+            android:id="@+id/edit_text_multi_line"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_margin="20dp"

@@ -52,12 +52,12 @@ class PopupIngredientsActivity : AppCompatActivity() {
         }
 
         // Get UI elements
-        val altNameSpinner = findViewById<Spinner>(R.id.altNameSpinner)
-        val dateButton = findViewById<Button>(R.id.dateButton)
-        val quantityPicker = findViewById<NumberPicker>(R.id.quantityPicker)
-        val cancelButton = findViewById<Button>(R.id.cancelButton)
-        val applyButton = findViewById<Button>(R.id.applyButton)
-        val deleteButton = findViewById<Button>(R.id.deleteIngredientButton)
+        val altNameSpinner = findViewById<Spinner>(R.id.alt_name_spinner)
+        val dateButton = findViewById<Button>(R.id.date_button)
+        val quantityPicker = findViewById<NumberPicker>(R.id.quantity_picker)
+        val cancelButton = findViewById<Button>(R.id.cancel_button)
+        val applyButton = findViewById<Button>(R.id.apply_button)
+        val deleteButton = findViewById<Button>(R.id.delete_ingredient_button)
 
         // Get ingredient data from intent
         @Suppress("DEPRECATION")

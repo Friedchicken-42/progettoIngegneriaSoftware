@@ -44,12 +44,12 @@ class PopupRecipeActivity : AppCompatActivity() {
         }
 
         // Get UI elements
-        val recipeImageView = findViewById<ImageView>(R.id.singleRecipeImageView)
-        val titleTextView = findViewById<TextView>(R.id.singleRecipeTitleTextView)
-        val servingsTextView = findViewById<TextView>(R.id.servingsTextView)
-        val sourceButton = findViewById<TextView>(R.id.sourceButton)
+        val recipeImageView = findViewById<ImageView>(R.id.single_recipe_image_view)
+        val titleTextView = findViewById<TextView>(R.id.single_recipe_title_text_view)
+        val servingsTextView = findViewById<TextView>(R.id.servings_text_view)
+        val sourceButton = findViewById<TextView>(R.id.source_button)
         val favoriteImageView = findViewById<ImageView>(R.id.favorite_icon)
-        val ingredientInstructionTextView = findViewById<TextView>(R.id.editTextTextMultiLine)
+        val ingredientInstructionTextView = findViewById<TextView>(R.id.edit_text_multi_line)
 
         // Get recipe data from intent
         @Suppress("DEPRECATION")

@@ -26,7 +26,7 @@
                 android:text="@string/alt_name_ingredient_spinner_textview" />
 
             <Spinner
-                android:id="@+id/altNameSpinner"
+                android:id="@+id/alt_name_spinner"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
@@ -47,7 +47,7 @@
             android:gravity="center">
 
             <Button
-                android:id="@+id/dateButton"
+                android:id="@+id/date_button"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/date_quantity_button_picker_height"
                 android:drawableEnd="@drawable/ic_calendar_black_24dp"
@@ -55,7 +55,7 @@
                 android:width="@dimen/ingredient_popup_button_dimension" />
 
             <Button
-                android:id="@+id/cancelButton"
+                android:id="@+id/cancel_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/cancel_button_text"
@@ -73,12 +73,12 @@
             android:layout_marginStart="@dimen/ingredient_vertical_layout_margin">
 
             <NumberPicker
-                android:id="@+id/quantityPicker"
+                android:id="@+id/quantity_picker"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/date_quantity_button_picker_height"/>
 
             <Button
-                android:id="@+id/applyButton"
+                android:id="@+id/apply_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/apply_button_text"
@@ -90,7 +90,7 @@
         </LinearLayout>
 
         <Button
-            android:id="@+id/deleteIngredientButton"
+            android:id="@+id/delete_ingredient_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="30dp"

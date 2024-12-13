@@ -17,7 +17,7 @@
     <string name="date_button_default_text">Data Scadenza</string>
     <string name="alt_name_ingredient_spinner_textview">Nome Alternativo</string>
     <string name="filter_button_description_text">Mostra i Filtri</string>
-    <string name="noRecipesText">Nessuna ricetta trovata</string>
+    <string name="no_recipes_text">Nessuna ricetta trovata</string>
     <string name="recipe_search_hint">Nome della ricetta</string>
     <string name="recipe_default_title">Nome Ricetta</string>
     <string name="recipe_image_description">Immagine della ricetta</string>

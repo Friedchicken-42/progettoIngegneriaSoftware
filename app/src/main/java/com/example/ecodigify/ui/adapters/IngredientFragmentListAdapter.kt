@@ -38,8 +38,8 @@ class IngredientFragmentListAdapter(private val dataSet: Array<Ingredient>, priv
      */
     class ViewHolder(view: View, val onClick: (Ingredient) -> Unit) : RecyclerView.ViewHolder(view) {
         // Define click listener for the ViewHolder's View
-        val textView: TextView = view.findViewById(R.id.ingredientTitleTextView)
-        val progressBar: ProgressBar = view.findViewById(R.id.ingredientExpirationProgressBar)
+        val textView: TextView = view.findViewById(R.id.ingredient_title_text_view)
+        val progressBar: ProgressBar = view.findViewById(R.id.ingredient_expiration_progress_bar)
 
         private var currentIngredient: Ingredient? = null
 
