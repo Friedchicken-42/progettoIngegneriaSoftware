@@ -48,11 +48,11 @@ object Manager {
     suspend fun filter(name: String, unwanted: List<Int>): List<RecipeFull> {
         val unwantedNames = ingredientGetAll()
             .filterIndexed { i, _ -> unwanted.contains(i) }
-            .map { i -> i.name }
+            .map { i -> i.name.lowercase() }
 
         return find(name)
             .filter { recipe ->
-                recipe.ingredients.all { (name, _) -> !unwantedNames.contains(name) }
+                recipe.ingredients.all { (name, _) -> !unwantedNames.contains(name.lowercase()) }
             }
     }
 

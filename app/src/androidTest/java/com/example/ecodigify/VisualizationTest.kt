@@ -25,8 +25,6 @@ import java.time.LocalDate
 
 @RunWith(AndroidJUnit4::class)
 class VisualizationTest {
-    val ingredientName = "Strawberries"
-
     @get:Rule
     val activityRule = ActivityScenarioRule(MainActivity::class.java)
 
@@ -38,10 +36,10 @@ class VisualizationTest {
         Manager.ingredientAdd(
             Ingredient(
                 id = 1,
-                name = ingredientName,
+                name = "strawberries",
                 addDate = LocalDate.now().minusDays(10),
                 expirationDate = LocalDate.now().plusDays(10),
-                possibleNames = listOf(ingredientName),
+                possibleNames = listOf("strawberries"),
                 quantity = "1"
             )
         )
@@ -67,7 +65,7 @@ class VisualizationTest {
         onView(withId(R.id.filter_button)).perform(click())
         Thread.sleep(200)
 
-        onView(withText(ingredientName)).inRoot(isPlatformPopup()).perform(click())
+        onView(withText("strawberries")).inRoot(isPlatformPopup()).perform(click())
         Thread.sleep(200)
 
         onView(withId(R.id.recipeRecyclerView)).check(matches(not(hasMinimumChildCount(1))))
