@@ -3,6 +3,7 @@ package com.example.ecodigify
 import android.content.Context
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.coroutineScope
+import androidx.room.Room
 import com.example.ecodigify.api.IngredientApi
 import com.example.ecodigify.api.RecipeApi
 import com.example.ecodigify.dataclass.Ingredient
@@ -12,7 +13,6 @@ import com.example.ecodigify.db.AppDatabase
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import androidx.room.Room
 
 /**
  * Manages data interactions between the UI, API, and database.
@@ -41,6 +41,14 @@ object Manager {
     }
 
     /**
+     * This method should be called after `init` to close the databse connection
+     */
+    fun close() {
+        db.close()
+    }
+
+
+    /**
      * Searches for an ingredient by barcode.
      *
      * @param code The barcode to search for.
@@ -63,11 +71,11 @@ object Manager {
     /**
      * Finds recipes containing a specific ingredient.
      *
-     * @param ing The ingredient name to search for.
-     * @return A list of full recipe details containing the ingredient.
+     * @param name The recipe name to search for.
+     * @return A list of full recipe where the title matches `name`.
      */
-    suspend fun find(ing: String): List<RecipeFull> {
-        return recipeApi.find(ing)
+    suspend fun find(name: String): List<RecipeFull> {
+        return recipeApi.find(name)
     }
 
     /**
@@ -78,6 +86,25 @@ object Manager {
      */
     suspend fun inflate(recipe: Recipe): RecipeFull {
         return recipeApi.inflate(recipe)
+    }
+
+    /**
+     * Search recipes by name and filters them based on a list
+     * of index correlated with `ingredientGetAll`
+     *
+     * @param name The recipe name to search for.
+     * @param unwanted The ingredients to exclude.
+     * @return A list of full recipe.
+     */
+    suspend fun filter(name: String, unwanted: List<Int>): List<RecipeFull> {
+        val unwantedNames = ingredientGetAll()
+            .filterIndexed { i, _ -> unwanted.contains(i) }
+            .map { i -> i.name.lowercase() }
+
+        return find(name)
+            .filter { recipe ->
+                recipe.ingredients.all { (name, _) -> !unwantedNames.contains(name.lowercase()) }
+            }
     }
 
     /**
