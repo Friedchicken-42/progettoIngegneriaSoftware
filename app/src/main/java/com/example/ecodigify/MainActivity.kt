@@ -6,6 +6,7 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import com.example.ecodigify.databinding.ActivityMainBinding
+import com.example.ecodigify.notifications.NotificationScheduler
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 /**
@@ -31,6 +32,11 @@ class MainActivity : AppCompatActivity() {
 
         // Initialize the application's data manager
         Manager.init(applicationContext)
+
+        run(lifecycle, {
+            val notificationScheduler = NotificationScheduler(applicationContext)
+            notificationScheduler.setExpireNotificationForEach(Manager.ingredientGetAll())
+        })
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)

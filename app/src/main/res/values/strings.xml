@@ -36,4 +36,9 @@
     <string name="add_new_name_text">Aggiungi nome alternativo…</string>
     <string name="add_new_name_title_text">Nuovo nome alternativo</string>
     <string name="delete_ingredient_button_text">Elimina Ingrediente</string>
+    <!-- Notification messages -->
+    <string name="notification_title">Ingredient Expiration Notice</string>
+    <string name="before_expiration_date_msg">%1$s is about to go bad!</string>
+    <string name="on_expiration_date_msg">%1$s expires today!</string>
+    <string name="after_expiration_date_msg">%1$s has gone bad!</string>
 </resources>
