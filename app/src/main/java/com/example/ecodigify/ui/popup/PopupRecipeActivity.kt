@@ -84,7 +84,7 @@ class PopupRecipeActivity : AppCompatActivity() {
                     } else {
                         Manager.recipeAdd(recipe!!)
                     }
-                }, done = { }
+                }
             )
         }
 

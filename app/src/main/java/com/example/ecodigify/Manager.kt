@@ -41,7 +41,7 @@ object Manager {
     }
 
     /**
-     * This method should be called after `init` to close the databse connection
+     * This method should be called after `init` to close the database connection
      */
     fun close() {
         db.close()

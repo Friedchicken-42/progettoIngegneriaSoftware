@@ -72,6 +72,7 @@ class RecipeApi : Api() {
      */
     suspend fun inflate(recipe: Recipe): RecipeFull {
         val out: ApiList<RecipeFullApiOutput> = client.get("$url/lookup.php?i=${recipe.id}").body()
+
         @Suppress("NAME_SHADOWING")
         val recipe = out.meals[0]
 
@@ -200,13 +201,13 @@ class RecipeApi : Api() {
                     val index = k.substring(13)
                     val key = "strMeasure$index"
 
-                    val a = v.jsonPrimitive.content
+                    val ingredient = v.jsonPrimitive.content.trim()
 
                     // match based on `N` (`index`)
-                    val b = jsonObj[key]?.jsonPrimitive?.content
+                    val quantity = jsonObj[key]?.jsonPrimitive?.content?.trim()
                         ?: throw SerializationException("Missing '$key' for $k ($index)")
 
-                    Pair(a, b)
+                    Pair(ingredient, quantity)
                 }
 
             return RecipeFullApiOutput(

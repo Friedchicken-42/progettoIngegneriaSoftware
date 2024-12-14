@@ -111,7 +111,7 @@ class IngredientPairListFragmentListAdapter(
             dataSet[position].second
         )
 
-        if (ingredients.any { i -> i.name == name })
+        if (ingredients.any { i -> i.name.lowercase() == name.lowercase() })
             viewHolder.textView.setTextColor(
                 ContextCompat.getColor(
                     viewHolder.textView.context,
