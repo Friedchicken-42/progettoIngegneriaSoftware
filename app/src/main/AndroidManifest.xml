@@ -35,7 +35,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <receiver android:name="com.example.ecodigify.notifications.NotificationReceiver" />
+        <receiver android:name="com.scratchdevs.ecodigify.notifications.NotificationReceiver" />
     </application>
 
 </manifest>

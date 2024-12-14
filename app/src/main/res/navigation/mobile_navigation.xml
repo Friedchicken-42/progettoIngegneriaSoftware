@@ -7,19 +7,19 @@
 
     <fragment
         android:id="@+id/navigation_ingredients"
-        android:name="com.example.ecodigify.ui.ingredients.IngredientsFragment"
+        android:name="com.scratchdevs.ecodigify.ui.ingredients.IngredientsFragment"
         android:label="@string/title_ingredients"
         tools:layout="@layout/fragment_ingredients" />
 
     <fragment
         android:id="@+id/navigation_search"
-        android:name="com.example.ecodigify.ui.search.SearchFragment"
+        android:name="com.scratchdevs.ecodigify.ui.search.SearchFragment"
         android:label="@string/title_search"
         tools:layout="@layout/fragment_search" />
 
     <fragment
         android:id="@+id/navigation_favourites"
-        android:name="com.example.ecodigify.ui.favourites.FavouritesFragment"
+        android:name="com.scratchdevs.ecodigify.ui.favourites.FavouritesFragment"
         android:label="@string/title_favourites"
         tools:layout="@layout/fragment_favourites" />
 </navigation>
