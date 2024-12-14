@@ -26,7 +26,7 @@ class NavigationTest {
 
         onView(withId(R.id.navigation_favourites)).perform(click())
         Thread.sleep(200)
-        onView(withId(R.id.favouritesRecyclerView)).check(matches(isDisplayed()))
+        onView(withId(R.id.favourites_recycler_view)).check(matches(isDisplayed()))
         onView(withId(R.id.text_favourites)).check(matches(isDisplayed()))
 
         onView(withId(R.id.navigation_ingredients)).perform(click())
