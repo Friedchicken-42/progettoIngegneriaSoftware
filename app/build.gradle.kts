@@ -7,11 +7,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.ecodigify"
+    namespace = "com.scratchdevs.ecodigify"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.example.ecodigify"
+        applicationId = "com.scratchdevs.ecodigify"
         minSdk = 26
         //noinspection ExpiredTargetSdkVersion
         targetSdk = 26
