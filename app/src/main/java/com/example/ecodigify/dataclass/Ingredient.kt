@@ -60,8 +60,9 @@ object LocalDateSerializer : KSerializer<LocalDate> {
  * @property name The primary name of the ingredient.
  * @property addDate The date when the ingredient was added.
  * @property expirationDate The date when the ingredient will expire.
- * @property possibleNames A list of alternative names for the ingredient.
  * @property quantity The quantity of the ingredient.
+ * @property possibleNames A list of alternative names for the ingredient.
+ * @property lastNotified The date of last notification
  */
 @Parcelize
 @Entity
@@ -75,7 +76,10 @@ data class Ingredient(
     @Serializable(with = LocalDateSerializer::class)
     @ColumnInfo(name = "expiration_date")
     val expirationDate: LocalDate,
+    val quantity: String,
     @ColumnInfo(name = "possible_names")
-    var possibleNames: List<String>,
-    val quantity: String
+    var possibleNames: List<String> = emptyList(),
+    @Serializable(with = LocalDateSerializer::class)
+    @ColumnInfo(name = "last_notified")
+    var lastNotified: LocalDate? = null,
 ) : Parcelable

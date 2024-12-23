@@ -6,8 +6,10 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import com.example.ecodigify.databinding.ActivityMainBinding
+import com.example.ecodigify.dataclass.Ingredient
 import com.example.ecodigify.notifications.NotificationScheduler
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import java.time.LocalDate
 
 /**
  * Main activity of the application.
@@ -35,7 +37,14 @@ class MainActivity : AppCompatActivity() {
 
         run(lifecycle, {
             val notificationScheduler = NotificationScheduler(applicationContext)
-            notificationScheduler.setExpireNotificationForEach(Manager.ingredientGetAll())
+            Manager.ingredientGetAll().forEach { ingredient ->
+                val hasScheduled = notificationScheduler.setExpireNotificationFor(ingredient)
+                if (hasScheduled) {
+                    val newIngredient = ingredient.copy(lastNotified = LocalDate.now())
+                    Manager.ingredientRemove(ingredient)
+                    Manager.ingredientAdd(newIngredient)
+                }
+            }
         })
 
         binding = ActivityMainBinding.inflate(layoutInflater)
