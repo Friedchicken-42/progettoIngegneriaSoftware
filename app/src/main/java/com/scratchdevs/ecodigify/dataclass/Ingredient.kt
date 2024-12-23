@@ -75,7 +75,10 @@ data class Ingredient(
     @Serializable(with = LocalDateSerializer::class)
     @ColumnInfo(name = "expiration_date")
     val expirationDate: LocalDate,
+    val quantity: String,
     @ColumnInfo(name = "possible_names")
-    var possibleNames: List<String>,
-    val quantity: String
+    var possibleNames: List<String> = emptyList(),
+    @Serializable(with = LocalDateSerializer::class)
+    @ColumnInfo(name = "last_notified")
+    val lastNotified: LocalDate? = null,
 ) : Parcelable
