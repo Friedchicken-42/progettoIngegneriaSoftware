@@ -41,4 +41,5 @@
     <string name="before_expiration_date_msg">%1$s is about to go bad!</string>
     <string name="on_expiration_date_msg">%1$s expires today!</string>
     <string name="after_expiration_date_msg">%1$s has gone bad!</string>
+    <string name="database_error">Error while building the database</string>
 </resources>

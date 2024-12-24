@@ -1,12 +1,12 @@
 package com.scratchdevs.ecodigify
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.scratchdevs.ecodigify.databinding.ActivityMainBinding
-import com.scratchdevs.ecodigify.dataclass.Ingredient
 import com.scratchdevs.ecodigify.notifications.NotificationScheduler
 import java.time.LocalDate
 
@@ -32,7 +32,16 @@ class MainActivity : androidx.appcompat.app.AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         // Initialize the application's data manager
-        Manager.init(applicationContext)
+        try {
+            Manager.init(applicationContext)
+        } catch (_: Exception) {
+            Toast.makeText(
+                applicationContext,
+                applicationContext.getString(R.string.database_error),
+                Toast.LENGTH_SHORT
+            )
+                .show()
+        }
 
         run(lifecycle, {
             val notificationScheduler = NotificationScheduler(applicationContext)
