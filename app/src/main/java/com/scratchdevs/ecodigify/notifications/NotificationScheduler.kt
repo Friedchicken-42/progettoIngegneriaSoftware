@@ -24,13 +24,16 @@ class NotificationScheduler(private val context: Context) {
      * Set expire notification at about 5 days before the expiration date
      *
      * @param ingredient to process
+     * @return if the notification was set or not
      */
-    fun setExpireNotificationFor(ingredient: Ingredient) {
+    fun setExpireNotificationFor(ingredient: Ingredient): Boolean {
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
-        // TODO: Set expiration date more dynamically.
+        if (!shouldNotifyFor(ingredient))
+            return false
+
         val notificationTimeMillis = ingredient.expirationDate
-            .minusDays(2)
+            .minusDays(7)
             .atStartOfDay()
             .atZone(TimeZone.getDefault().toZoneId())
             .toInstant()
@@ -58,13 +61,8 @@ class NotificationScheduler(private val context: Context) {
             "NotificationScheduler",
             "Notification scheduled for ${ingredient.name} at ${ingredient.expirationDate} midnight"
         )
-    }
 
-    /**
-     * Call in bulk `setExpireNotificationFor` for each ingredient in the list
-     */
-    fun setExpireNotificationForEach(ingredients: List<Ingredient>) {
-        ingredients.forEach(::setExpireNotificationFor)
+        return true
     }
 
     /**
@@ -93,6 +91,19 @@ class NotificationScheduler(private val context: Context) {
         }
 
         notificationManager.notify(1, notification.build())
+    }
+
+    private fun shouldNotifyFor(ingredient: Ingredient): Boolean {
+        val daysUntilExpiration = ingredient.expirationDate.compareTo(LocalDate.now())
+        val daysFromLastNotification = ingredient.lastNotified?.compareTo(ingredient.expirationDate)
+        val hasNotified = ingredient.lastNotified != null
+
+        return when {
+            hasNotified && daysUntilExpiration < 0 && daysFromLastNotification!! >= 0 -> true
+            hasNotified && daysUntilExpiration == 0 && daysFromLastNotification!! > 0 -> true
+            !hasNotified && daysUntilExpiration <= 7 -> true
+            else -> false
+        }
     }
 
     // Create the Notification Channel (Required for Android 8.0 and above)
