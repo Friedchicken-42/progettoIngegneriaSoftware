@@ -98,9 +98,12 @@ class NotificationScheduler(private val context: Context) {
         val daysFromLastNotification = ingredient.lastNotified?.compareTo(ingredient.expirationDate)
         val hasNotified = ingredient.lastNotified != null
 
+        println(daysFromLastNotification)
+        println(daysUntilExpiration)
+
         return when {
-            hasNotified && daysUntilExpiration < 0 && daysFromLastNotification!! >= 0 -> true
-            hasNotified && daysUntilExpiration == 0 && daysFromLastNotification!! > 0 -> true
+            hasNotified && daysUntilExpiration < 0 && daysFromLastNotification!! <= 0 -> true
+            hasNotified && daysUntilExpiration == 0 && daysFromLastNotification!! < 0 -> true
             !hasNotified && daysUntilExpiration <= 7 -> true
             else -> false
         }
