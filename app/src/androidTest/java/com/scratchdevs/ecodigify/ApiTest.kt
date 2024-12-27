@@ -31,7 +31,7 @@ class ApiTest {
         assert(ingredient.id == 8715035110106)
         assert(ingredient.addDate == LocalDate.now())
         assert(ingredient.expirationDate == date)
-        assert(ingredient.possibleNames == listOf("condiments", "sauces", "soy sauces"))
+        assert(ingredient.possibleNames == listOf("condiment", "sauce", "soy sauce"))
         assert(ingredient.quantity == "150")
     }
 
