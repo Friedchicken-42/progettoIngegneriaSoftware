@@ -5,5 +5,5 @@
     <dimen name="list_margin_top_bottom">15dp</dimen>
     <dimen name="ingredient_vertical_layout_margin">20dp</dimen>
     <dimen name="date_quantity_button_picker_height">60dp</dimen>
-    <dimen name="ingredient_popup_button_dimension">160dp</dimen>
+    <dimen name="ingredient_popup_button_dimension">180dp</dimen>
 </resources>
