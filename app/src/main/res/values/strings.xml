@@ -15,7 +15,7 @@
     <string name="cancel_button_text">Cancel</string>
     <string name="apply_button_text">Apply</string>
     <string name="date_button_default_text">Expiry Date</string>
-    <string name="alt_name_ingredient_spinner_textview">Alternative Name</string>
+    <string name="alt_name_ingredient_spinner_textview">Name</string>
     <string name="filter_button_description_text">Show Filters</string>
     <string name="no_recipes_text">No Recipe Found</string>
     <string name="recipe_search_hint">Recipe\'s Name</string>
@@ -42,4 +42,7 @@
     <string name="on_expiration_date_msg">%1$s expires today!</string>
     <string name="after_expiration_date_msg">%1$s has gone bad!</string>
     <string name="database_error">Error while building the database</string>
+    <string name="ingredient_expired">Expired!</string>
+    <string name="ingredient_expiring">Expiring!</string>
+    <string name="ingredient_expiration_report">%1$dd</string>
 </resources>

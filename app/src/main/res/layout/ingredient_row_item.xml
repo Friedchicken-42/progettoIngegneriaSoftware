@@ -1,25 +1,56 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginHorizontal="@dimen/list_margin_lateral"
     android:layout_marginVertical="@dimen/list_margin_top_bottom"
-    android:layout_marginBottom="30dp"
+    android:layout_marginBottom="20dp"
     android:gravity="clip_horizontal"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/ingredient_title_text_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/default_ingredient_title_text"
-        android:textStyle="bold" />
-
-    <ProgressBar
-        android:id="@+id/ingredient_expiration_progress_bar"
-        style="?android:attr/progressBarStyleHorizontal"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="8dp"
-        android:layout_marginTop="8dp"
-        android:max="100"
-        android:progressTint="@color/purple_500" />
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/ingredient_quantity_text"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            tools:text="textView" />
+
+        <Space
+            android:layout_width="10dp"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/ingredient_title_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:singleLine="true"
+            android:text="@string/default_ingredient_title_text"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+            android:textStyle="bold" />
+
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/ingredient_days_until_expiration"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TextView"
+            android:textAlignment="viewStart" />
+
+    </LinearLayout>
+
+    <View
+        android:id="@+id/divider2"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_weight="1"
+        android:background="?android:attr/listDivider" />
+
 </LinearLayout>

@@ -7,6 +7,7 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.scratchdevs.ecodigify.databinding.ActivityMainBinding
+import com.scratchdevs.ecodigify.dataclass.Ingredient
 import com.scratchdevs.ecodigify.notifications.NotificationScheduler
 import java.time.LocalDate
 
@@ -39,21 +40,8 @@ class MainActivity : androidx.appcompat.app.AppCompatActivity() {
                 applicationContext,
                 applicationContext.getString(R.string.database_error),
                 Toast.LENGTH_SHORT
-            )
-                .show()
+            ).show()
         }
-
-        run(lifecycle, {
-            val notificationScheduler = NotificationScheduler(applicationContext)
-            Manager.ingredientGetAll().forEach { ingredient ->
-                val notified = notificationScheduler.setExpireNotificationFor(ingredient)
-                if (notified) {
-                    val newIngredient = ingredient.copy(lastNotified = LocalDate.now())
-                    Manager.ingredientRemove(ingredient)
-                    Manager.ingredientAdd(newIngredient)
-                }
-            }
-        })
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -68,5 +56,17 @@ class MainActivity : androidx.appcompat.app.AppCompatActivity() {
             setOf(R.id.navigation_ingredients, R.id.navigation_search, R.id.navigation_favourites)
         )
         navView.setupWithNavController(navController)
+
+        run(lifecycle, {
+            val notificationScheduler = NotificationScheduler(applicationContext)
+            Manager.ingredientGetAll().forEach { ingredient ->
+                val notified = notificationScheduler.setExpireNotificationFor(ingredient)
+                if (notified) {
+                    val newIngredient = ingredient.copy(lastNotified = LocalDate.now())
+                    Manager.ingredientRemove(ingredient)
+                    Manager.ingredientAdd(newIngredient)
+                }
+            }
+        })
     }
 }

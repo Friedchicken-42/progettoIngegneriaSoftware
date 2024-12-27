@@ -77,7 +77,7 @@ data class Ingredient(
     val expirationDate: LocalDate,
     val quantity: String,
     @ColumnInfo(name = "possible_names")
-    var possibleNames: List<String> = emptyList(),
+    var possibleNames: List<String> = listOf(name),
     @Serializable(with = LocalDateSerializer::class)
     @ColumnInfo(name = "last_notified")
     val lastNotified: LocalDate? = null,

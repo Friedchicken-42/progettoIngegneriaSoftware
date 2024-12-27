@@ -13,6 +13,7 @@ import androidx.core.app.NotificationCompat
 import com.scratchdevs.ecodigify.R
 import com.scratchdevs.ecodigify.dataclass.Ingredient
 import java.time.LocalDate
+import java.time.temporal.ChronoUnit
 import java.util.TimeZone
 
 class NotificationScheduler(private val context: Context) {
@@ -80,30 +81,30 @@ class NotificationScheduler(private val context: Context) {
             .setContentTitle(context.getString(R.string.notification_title))
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
 
-        ingredientExpirationDate.compareTo(LocalDate.now()).let {
-            notification.setContentText(
-                when {
-                    it < 0 -> context.getString(R.string.after_expiration_date_msg, ingredientName)
-                    it == 0 -> context.getString(R.string.on_expiration_date_msg, ingredientName)
-                    else -> context.getString(R.string.before_expiration_date_msg, ingredientName)
-                }
-            )
-        }
+        val daysUntilExpiration = ChronoUnit.DAYS.between(LocalDate.now(), ingredientExpirationDate)
+        notification.setContentText(
+            when {
+                daysUntilExpiration < 0 -> context.getString(R.string.after_expiration_date_msg, ingredientName)
+                daysUntilExpiration == 0L -> context.getString(R.string.on_expiration_date_msg, ingredientName)
+                else -> context.getString(R.string.before_expiration_date_msg, ingredientName)
+            }
+        )
 
         notificationManager.notify(1, notification.build())
     }
 
     private fun shouldNotifyFor(ingredient: Ingredient): Boolean {
-        val daysUntilExpiration = ingredient.expirationDate.compareTo(LocalDate.now())
-        val daysFromLastNotification = ingredient.lastNotified?.compareTo(ingredient.expirationDate)
+        val daysUntilExpiration = ChronoUnit.DAYS.between(LocalDate.now(), ingredient.expirationDate)
         val hasNotified = ingredient.lastNotified != null
-
-        println(daysFromLastNotification)
-        println(daysUntilExpiration)
+        val daysFromLastNotification = if (hasNotified) {
+            ChronoUnit.DAYS.between(ingredient.lastNotified, ingredient.expirationDate)
+        } else {
+            0L
+        }
 
         return when {
-            hasNotified && daysUntilExpiration < 0 && daysFromLastNotification!! <= 0 -> true
-            hasNotified && daysUntilExpiration == 0 && daysFromLastNotification!! < 0 -> true
+            hasNotified && daysUntilExpiration < 0 && daysFromLastNotification <= 0 -> true
+            hasNotified && daysUntilExpiration == 0L && daysFromLastNotification < 0 -> true
             !hasNotified && daysUntilExpiration <= 7 -> true
             else -> false
         }

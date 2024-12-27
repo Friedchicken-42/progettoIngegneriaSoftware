@@ -11,6 +11,7 @@ import com.scratchdevs.ecodigify.R
 import com.scratchdevs.ecodigify.dataclass.Ingredient
 import java.time.LocalDate
 import java.time.Period
+import java.time.temporal.ChronoUnit
 import kotlin.math.min
 
 /**
@@ -44,7 +45,8 @@ class IngredientFragmentListAdapter(
     ) : androidx.recyclerview.widget.RecyclerView.ViewHolder(view) {
         // Define click listener for the ViewHolder's View
         val textView: TextView = view.findViewById(R.id.ingredient_title_text_view)
-        val progressBar: ProgressBar = view.findViewById(R.id.ingredient_expiration_progress_bar)
+        val quantityView: TextView = view.findViewById(R.id.ingredient_quantity_text)
+        val dateView: TextView = view.findViewById(R.id.ingredient_days_until_expiration)
 
         private var currentIngredient: Ingredient? = null
 
@@ -95,33 +97,27 @@ class IngredientFragmentListAdapter(
      * @param position The position of the item within the adapter's data set.
      */
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
-        viewHolder.bind(dataSet[position])
-
-        val daysSinceAdded: Float =
-            Period.between(dataSet[position].addDate, LocalDate.now()).days.toFloat()
-        val daysExpiration: Float = Period.between(
-            dataSet[position].addDate,
-            dataSet[position].expirationDate
-        ).days.toFloat()
-        val progress = if (LocalDate.now() > dataSet[position].expirationDate) {
-            viewHolder.progressBar.max
-        } else {
-            min(
-                ((daysSinceAdded + 1) / (daysExpiration + 1) * viewHolder.progressBar.max).toInt(),
-                viewHolder.progressBar.max
-            )
-        }
-
         val context = viewHolder.itemView.context
-        val progressColor = when {
-            progress < 50 -> ContextCompat.getColor(context, R.color.progress_green)
-            progress in 50..80 -> ContextCompat.getColor(context, R.color.progress_yellow)
-            else -> ContextCompat.getColor(context, R.color.progress_red)
+        val ingredient = dataSet[position]
+        viewHolder.bind(ingredient)
+
+        viewHolder.quantityView.text = ingredient.quantity
+        viewHolder.textView.text = ingredient.name
+
+        val daysExpiration = ChronoUnit.DAYS.between(LocalDate.now(), ingredient.expirationDate)
+
+        viewHolder.dateView.text = when {
+            daysExpiration < 0 -> context.getString(R.string.ingredient_expired)
+            daysExpiration == 0L -> context.getString(R.string.ingredient_expiring)
+            else -> context.getString(R.string.ingredient_expiration_report, daysExpiration)
         }
 
-        viewHolder.textView.text = dataSet[position].name
-        viewHolder.progressBar.progress = progress
-        viewHolder.progressBar.progressTintList = ColorStateList.valueOf(progressColor)
+        if (daysExpiration < 0) {
+            viewHolder.dateView.setTextColor(ContextCompat.getColor(context, R.color.progress_red))
+        } else if (daysExpiration == 0L) {
+            viewHolder.dateView.setTextColor(ContextCompat.getColor(context, R.color.progress_yellow))
+        }
+
     }
 
     /**
