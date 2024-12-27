@@ -47,13 +47,30 @@ class IngredientApi : Api() {
             "1"
         }
 
+        fun endsWith(word: String, vararg seq: String): Boolean {
+            return seq.filter { word.endsWith(it) }.any()
+        }
+
+        val possibleNames = out.product.categoriesTags
+            .map {
+                if (it.contains(":")) it.drop(3)
+                else it
+            }
+            .map { it.replace("-", " ") }
+            .map { word ->
+                when {
+                    word.endsWith("ies") -> word.dropLast(3) + "y"
+                    endsWith(word, "xes", "ses", "ches", "shes") -> word.dropLast(2)
+                    word.endsWith("ves") -> word.dropLast(3) + "f"
+                    word.endsWith("s") && !endsWith(word, "ss", "us", "is") -> word.dropLast(1)
+                    else -> word
+                }
+            }
+
         return Ingredient(
             id = out.code.toLong(),
             name = "",
-            possibleNames = out.product.categoriesTags.map {
-                if (it.contains(":")) it.drop(3)
-                else it
-            }.map { it.replace("-", " ") },
+            possibleNames = possibleNames,
             addDate = LocalDate.now(),
             expirationDate = expirationDate,
             quantity = quantity,
